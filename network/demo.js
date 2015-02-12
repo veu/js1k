@@ -22,11 +22,28 @@ var
     hypeRate = 0.2;
 
 
-var nodes = [],
-    hype = [];
+var nodes, hypeWaves;
+
+function setup() {
+    nodes = [],
+    hypeWaves = [];
+    for (var y = gridHeight; y--;) {
+        for (var x = gridWidth; x--;) {
+            nodes.push({
+                x: (x / gridWidth * width) + offset + (Math.random() - .5) * 12,
+                y: (y / gridHeight * height) + offset + (Math.random() - .5) * 12,
+                r: (Math.random() * (maxRadius - minRadius) | 0) + minRadius,
+                drawRadius: function () { return this.r / maxRadius * 6; },
+                distance: function (p) { return Math.sqrt((x = this.x - p.x) * x + (y = this.y - p.y) * y, 2); },
+                hype: function () { this.hyped = 1; hypeWaves.push({x: this.x, y: this.y, r: 0, rMax: this.r}); }
+            });
+        }
+    }
+    setInterval(update, 1000 / fps | 0);
+}
 
 function draw() {
-    var i, node;
+    var i, node, wave;
     c.fillStyle = '#000';
     c.fillRect(0, 0, a.width, a.height);
 
@@ -40,27 +57,29 @@ function draw() {
         c.stroke(); 
     }
 
-    for (i in hype) {
+    for (i in hypeWaves) {
+        wave = hypeWaves[i];
         c.beginPath();
-        c.arc(hype[i].x, hype[i].y, hype[i].r, 0, 7, 0);
+        c.arc(wave.x, wave.y, wave.r, 0, 7, 0);
         c.strokeStyle = '#f00';
         c.stroke(); 
     }
 }
 
 function update() {
-    var i, k, node;
-    for (i in hype) {
-        hype[i].r++;
+    var i, k, node, wave;
+    for (i in hypeWaves) {
+        wave = hype[i];
+        wave.r++;
         for (k in nodes) {
             node = nodes[k];
-            if (node.hyped || Math.abs(node.distance(hype[i]) - hype[i].r) > 2) continue;
+            if (node.hyped || Math.abs(node.distance(wave) - wave.r) > 2) continue;
             if (Math.random() < hypeRate) {
                 node.hype()
             }
         }
     }
-    hype = hype.filter(function (h) { return h.r < h.rMax; });
+    hypeWaves = hypeWaves.filter(function (h) { return h.r < h.rMax; });
     draw();
 }
 
@@ -82,18 +101,4 @@ document.onclick = function (e) {
     }
 };
 
-(function setup() {
-    for (var y = gridHeight; y--;) {
-        for (var x = gridWidth; x--;) {
-            nodes.push({
-                x: (x / gridWidth * width) + offset + (Math.random() - .5) * 12,
-                y: (y / gridHeight * height) + offset + (Math.random() - .5) * 12,
-                r: (Math.random() * (maxRadius - minRadius) | 0) + minRadius,
-                drawRadius: function () { return this.r / maxRadius * 6; },
-                distance: function (p) { return Math.sqrt((x = this.x - p.x) * x + (y = this.y - p.y) * y, 2); },
-                hype: function () { this.hyped = 1; hype.push({x: this.x, y: this.y, r: 0, rMax: this.r}); }
-            });
-        }
-    }
-    setInterval(update, 1000 / fps | 0);
-})();
+setup();
