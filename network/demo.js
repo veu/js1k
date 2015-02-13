@@ -7,9 +7,9 @@ var
     offset = 20,
 
     // number of columns
-    gridWidth = 24,
+    columns = 24,
     // number of rows
-    gridHeight = 16,
+    rows = 16,
 
     // simulation speed
     fps = 30,
@@ -27,11 +27,11 @@ var nodes, hypeWaves;
 function setup() {
     nodes = [],
     hypeWaves = [];
-    for (var y = gridHeight; y--;) {
-        for (var x = gridWidth; x--;) {
+    for (var y = rows; y--;) {
+        for (var x = columns; x--;) {
             nodes.push({
-                x: (x / gridWidth * width) + offset + (Math.random() - .5) * 12,
-                y: (y / gridHeight * height) + offset + (Math.random() - .5) * 12,
+                x: (x / columns * width) + offset + (Math.random() - .5) * 12,
+                y: (y / rows * height) + offset + (Math.random() - .5) * 12,
                 r: (Math.random() * (maxRadius - minRadius) | 0) + minRadius,
                 drawRadius: function () { return this.r / maxRadius * 6; },
                 distance: function (p) { return Math.sqrt((x = this.x - p.x) * x + (y = this.y - p.y) * y, 2); },
@@ -69,7 +69,7 @@ function draw() {
 function update() {
     var i, k, node, wave;
     for (i in hypeWaves) {
-        wave = hype[i];
+        wave = hypeWaves[i];
         wave.r++;
         for (k in nodes) {
             node = nodes[k];
