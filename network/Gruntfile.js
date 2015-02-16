@@ -16,7 +16,7 @@ module.exports = function(grunt) {
     regpack: {
       firstTask: {
         options: {
-          globalVariables: '',
+          globalVariables: 'a',
           separator: ''
         },
         files: [
@@ -34,6 +34,14 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-regpack');
 
-  grunt.registerTask('default', ['uglify', 'regpack']);
+  grunt.registerTask('copy-shim', function() {
+    var fs = require('fs'),
+        demo = fs.readFileSync('build/demo.min.js', {encoding: 'utf8'}),
+        shim = fs.readFileSync('shim.html', {encoding: 'utf8'});
+    shim = shim.replace('%DEMO%', demo);
+    fs.writeFileSync('build/shim.html', shim);
+  });
+
+  grunt.registerTask('default', ['uglify', 'regpack', 'copy-shim']);
 
 };
