@@ -34,7 +34,7 @@ function draw() {
         node = nodes[i];
         node.move();
         c.beginPath();
-        c.arc(node.x, node.y, node.drawRadius(), 0, 7, 0);
+        c.arc(node.x + (node.hyped && Math.random() / 2), node.y + (node.hyped && Math.random() / 2), node.drawRadius(), 0, 7, 0);
         c.fillStyle = getColor(node.color);
         c.fill();
     }
@@ -96,6 +96,7 @@ document.onclick = function (e) {
                 move: function() { this.x += this.vx; this.y += this.vy; this.vx *= .9; this.vy *= .9; },
                 drawRadius: function () { return this.r / maxRadius * 6; },
                 distance: function (p) { return Math.sqrt((x = this.x - p.x) * x + (y = this.y - p.y) * y, 2); },
+                hyped: 0,
                 tryHype: function (hyper) {
                     var colorDiff = Math.abs(this.color - hyper.node.color);
                     if (Math.random() < (1 - colorDiff / 256) / 4) {
