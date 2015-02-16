@@ -23,8 +23,8 @@ var
 var nodes = [],
     hype = [];
 
-function getColor(col) {
-    return "rgba(" + [255, (255 - col), col, 1] + ")";
+function getColor(col, op) {
+    return "rgba(" + [255, (255 - col), col, op || 1] + ")";
 }
 
 function draw() {
@@ -48,6 +48,8 @@ function draw() {
         c.beginPath();
         c.arc(hype[i].node.x, hype[i].node.y, hype[i].r, 0, 7, 0); // hype moves with node.
         // c.arc(hype[i].x, hype[i].y, hype[i].r, 0, 7, 0);
+        c.fillStyle = getColor(hype[i].node.color, (1 - hype[i].r / hype[i].rMax) * .5); //'#f00';
+        c.fill();
         c.strokeStyle = getColor(hype[i].node.color); //'#f00';
         c.stroke();
     }
