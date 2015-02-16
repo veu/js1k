@@ -1,15 +1,14 @@
 // config
 var
-    // size for area with nodes
-    width = 600,
-    height = 400,
     // top and left offset
     offset = 20,
+    // how far nodes are apart
+    spread = 25,
 
     // number of columns
-    gridWidth = 24,
+    gridWidth = (a.width - offset * 2) / spread + 1 | 0,
     // number of rows
-    gridHeight = 16,
+    gridHeight = (a.height - offset * 2) / spread + 1 | 0,
 
     // simulation speed
     fps = 30,
@@ -21,12 +20,11 @@ var
     // likelyhood to get hyped if touched by hype circle
     hypeRate = 0.2;
 
-
 var nodes = [],
     hype = [];
 
 function getColor(col) {
-    return "rgba(255," + (255 - col) + "," + col + ",1)";
+    return "rgba(" + [255, (255 - col), col, 1] + ")";
 }
 
 function draw() {
@@ -98,8 +96,8 @@ document.onclick = function (e) {
         for (var x = gridWidth; x--;) {
             nodes.push({
                 color: Math.random() * 255 | 0,
-                x: (x / gridWidth * width) + offset + (Math.random() - .5) * 12,
-                y: (y / gridHeight * height) + offset + (Math.random() - .5) * 12,
+                x: x * spread + offset + (Math.random() - .5) * 12,
+                y: y * spread + offset + (Math.random() - .5) * 12,
                 vx: 0, vy: 0,
                 r: (Math.random() * (maxRadius - minRadius) | 0) + minRadius,
                 move: function() { this.x += this.vx; this.y += this.vy; this.vx *= .9; this.vy *= .9; },
