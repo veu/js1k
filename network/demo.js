@@ -16,16 +16,16 @@ var
     // minimum radius for hype circles
     minRadius = 10,
     // maximum radius for hype circles
-    maxRadius = 50;
+    maxRadius = 50,
 
-var nodes = [],
-    hype = [];
+    nodes = [],
+    hype = [],
 
-function getColor(col, op) {
+getColor = function(col, op) {
     return "rgba(" + [255, (255 - col), col, op || 1] + ")";
-}
+},
 
-function draw() {
+draw = function() {
     var i, node;
     c.fillStyle = '#000';
     c.fillRect(0, 0, a.width, a.height);
@@ -47,9 +47,9 @@ function draw() {
         c.strokeStyle = getColor(hype[i].node.color); //'#f00';
         c.stroke();
     }
-}
+},
 
-function update() {
+update = function() {
     var i, k, node;
     for (i in hype) {
         hype[i].r++;
@@ -64,13 +64,13 @@ function update() {
         return alive;
     });
     draw();
-}
+},
 
-function reset() {
+reset = function() {
     for (var i in nodes) {
         nodes[i].hyped = 0;
     }
-}
+};
 
 document.onclick = function (e) {
     var i, node, mouse = {x: e.pageX, y: e.pageY};
@@ -84,38 +84,36 @@ document.onclick = function (e) {
     }
 };
 
-(function setup() {
-    for (var y = gridHeight; y--;) {
-        for (var x = gridWidth; x--;) {
-            nodes.push({
-                color: Math.random() * 256 | 0,
-                x: x * spread + offset + (Math.random() - .5) * 12,
-                y: y * spread + offset + (Math.random() - .5) * 12,
-                vx: 0, vy: 0,
-                r: (Math.random() * (maxRadius - minRadius) | 0) + minRadius,
-                move: function() { this.x += this.vx; this.y += this.vy; this.vx *= .9; this.vy *= .9; },
-                drawRadius: function () { return this.r / maxRadius * 6; },
-                distance: function (p) { return Math.sqrt((x = this.x - p.x) * x + (y = this.y - p.y) * y, 2); },
-                hyped: 0,
-                tryHype: function (hyper) {
-                    var colorDiff = Math.abs(this.color - hyper.node.color);
-                    if (Math.random() < (1 - colorDiff / 256) / 4) {
-                        this.hype(hyper);
-                    }
-                },
-                hype: function (hyper) {
-                    // a hyper hypes a hypee
-                    if (hyper.node) {
-                        this.color = (hyper.node.color + (Math.random() - .5) * 20) | 0;
-                        this.color = Math.max(0, Math.min(255, this.color));
-                    } // adopt color with slight mutation
-                    this.vx = -(this.x - hyper.x) * .05;
-                    this.vy = -(this.y - hyper.y) * .05;
-                    this.hyped = 1;
-                    hype.push({node: this, x: this.x, y: this.y, r: 0, rMax: this.r}); // only need reference to node in hype array...?
+for (var y = gridHeight; y--;) {
+    for (var x = gridWidth; x--;) {
+        nodes.push({
+            color: Math.random() * 256 | 0,
+            x: x * spread + offset + (Math.random() - .5) * 12,
+            y: y * spread + offset + (Math.random() - .5) * 12,
+            vx: 0, vy: 0,
+            r: (Math.random() * (maxRadius - minRadius) | 0) + minRadius,
+            move: function() { this.x += this.vx; this.y += this.vy; this.vx *= .9; this.vy *= .9; },
+            drawRadius: function () { return this.r / maxRadius * 6; },
+            distance: function (p) { return Math.sqrt((x = this.x - p.x) * x + (y = this.y - p.y) * y, 2); },
+            hyped: 0,
+            tryHype: function (hyper) {
+                var colorDiff = Math.abs(this.color - hyper.node.color);
+                if (Math.random() < (1 - colorDiff / 256) / 4) {
+                    this.hype(hyper);
                 }
-            });
-        }
+            },
+            hype: function (hyper) {
+                // a hyper hypes a hypee
+                if (hyper.node) {
+                    this.color = (hyper.node.color + (Math.random() - .5) * 20) | 0;
+                    this.color = Math.max(0, Math.min(255, this.color));
+                } // adopt color with slight mutation
+                this.vx = -(this.x - hyper.x) * .05;
+                this.vy = -(this.y - hyper.y) * .05;
+                this.hyped = 1;
+                hype.push({node: this, x: this.x, y: this.y, r: 0, rMax: this.r}); // only need reference to node in hype array...?
+            }
+        });
     }
-    setInterval(update, 1000 / fps | 0);
-})();
+}
+setInterval(update, 1000 / fps | 0);
