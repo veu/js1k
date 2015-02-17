@@ -21,7 +21,6 @@ var
     maxRadius = 50,
 
     nodes = [],
-    hype = [],
 
 getColor = function(col, op) {
     return "rgba(" + [255, (255 - col), col, op || 1] + ")";
@@ -39,36 +38,36 @@ draw = function() {
         c.arc(node.x + (node.hyped && Math.random() / 2), node.y + (node.hyped && Math.random() / 2), node.drawRadius(), 0, 7, 0);
         c.fillStyle = getColor(node.color);
         c.fill();
-    }
 
-    for (i in hype) {
+        if (!node.hypeR) continue;
+
         c.beginPath();
-        c.arc(hype[i].node.x, hype[i].node.y, hype[i].r, 0, 7, 0); // hype moves with node.
-        c.fillStyle = getColor(hype[i].node.color, (1 - hype[i].r / hype[i].rMax) * .5); //'#f00';
+        c.arc(node.x, node.y, node.hypeR, 0, 7, 0); // hype moves with node.
+        c.fillStyle = getColor(node.color, (1 - node.hypeR / node.hypeRMax) * .5); //'#f00';
         c.fill();
-        c.strokeStyle = getColor(hype[i].node.color); //'#f00';
+        c.strokeStyle = getColor(node.color); //'#f00';
         c.stroke();
     }
 },
 
 update = function() {
-    var i, k, node;
-    for (k in nodes) {
-        node = nodes[k];
+    var i, k, node, node2, alive;
+    for (i in nodes) {
+        node = nodes[i];
         if (node.hyped) node.hyped--;
-    }
-    for (i in hype) {
-        hype[i].r++;
+
+        if (!node.hypeR) continue;
+
+        node.hypeR++;
         for (k in nodes) {
-            node = nodes[k];
-            if (node.hyped > 0 || Math.abs(node.distance(hype[i]) - hype[i].r) > 2) continue;
-            node.tryHype(hype[i]);
+            node2 = nodes[k];
+            if (node2.hyped > 0 || Math.abs(node2.distance(node) - node.hypeR) > 2) continue;
+            node2.tryHype(node);
         }
+
+        alive = node.hypeR < node.hypeRMax;
+        if (!alive) node.hypeR = 0;
     }
-    hype = hype.filter(function (h) {
-        var alive = h.r < h.rMax;
-        return alive;
-    });
     draw();
 },
 
@@ -97,27 +96,28 @@ for (var y = gridHeight; y--;) {
             x: x * spread + offset + (Math.random() - .5) * 12,
             y: y * spread + offset + (Math.random() - .5) * 12,
             vx: 0, vy: 0,
-            r: (Math.random() * (maxRadius - minRadius) | 0) + minRadius,
             move: function() { this.x += this.vx; this.y += this.vy; this.vx *= .9; this.vy *= .9; },
-            drawRadius: function () { return this.r / maxRadius * 6; },
+            drawRadius: function () { return this.hypeRMax / maxRadius * 6; },
             distance: function (p) { return Math.sqrt((x = this.x - p.x) * x + (y = this.y - p.y) * y, 2); },
             hyped: 0,
+            hypeR: 0,
+            hypeRMax: (Math.random() * (maxRadius - minRadius) | 0) + minRadius,
             tryHype: function (hyper) {
-                var colorDiff = Math.abs(this.color - hyper.node.color);
+                var colorDiff = Math.abs(this.color - hyper.color);
                 if (Math.random() < (1 - colorDiff / 256) / 4) {
                     this.hype(hyper);
                 }
             },
             hype: function (hyper) {
                 // a hyper hypes a hypee
-                if (hyper.node) {
-                    this.color = (hyper.node.color + (Math.random() - .5) * 20) | 0;
+                if (hyper) {
+                    this.color = (hyper.color + (Math.random() - .5) * 20) | 0;
                     this.color = Math.max(0, Math.min(255, this.color));
                 } // adopt color with slight mutation
                 this.vx = -(this.x - hyper.x) * .05;
                 this.vy = -(this.y - hyper.y) * .05;
                 this.hyped = cooldown;
-                hype.push({node: this, x: this.x, y: this.y, r: 0, rMax: this.r}); // only need reference to node in hype array...?
+                this.hypeR = 1;
             }
         });
     }
