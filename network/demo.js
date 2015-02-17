@@ -9,6 +9,8 @@ var
     gridWidth = (a.width - offset * 2) / spread + 1 | 0,
     // number of rows
     gridHeight = (a.height - offset * 2) / spread + 1 | 0,
+    // hype cooldown in frames
+    cooldown = 200,
 
     // simulation speed
     fps = 30,
@@ -51,6 +53,10 @@ draw = function() {
 
 update = function() {
     var i, k, node;
+    for (k in nodes) {
+        node = nodes[k];
+        if (node.hyped) node.hyped--;
+    }
     for (i in hype) {
         hype[i].r++;
         for (k in nodes) {
@@ -110,7 +116,7 @@ for (var y = gridHeight; y--;) {
                 } // adopt color with slight mutation
                 this.vx = -(this.x - hyper.x) * .05;
                 this.vy = -(this.y - hyper.y) * .05;
-                this.hyped = 1;
+                this.hyped = cooldown;
                 hype.push({node: this, x: this.x, y: this.y, r: 0, rMax: this.r}); // only need reference to node in hype array...?
             }
         });
