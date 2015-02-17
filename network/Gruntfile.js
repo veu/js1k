@@ -19,7 +19,6 @@ module.exports = function(grunt) {
         'colorDiff',
         'cooldown',
         'distance',
-        'draw',
         'drawRadius',
         'fps',
         'getColor',
@@ -39,10 +38,8 @@ module.exports = function(grunt) {
         'nodes',
         'offset',
         'op',
-        'reset',
         'spread',
         'tryHype',
-        'update',
         'vx',
         'vy',
       ]
