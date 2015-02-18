@@ -16,7 +16,7 @@ fps = 30,
 // minimum radius for hype circles
 minRadius = 10,
 // maximum radius for hype circles
-maxRadius = 50,
+maxRadius = 60,
 
 nodes = [],
 
@@ -51,7 +51,7 @@ for (var y = gridHeight; y--;) {
             hypeRMax: (Math.random() * (maxRadius - minRadius) | 0) + minRadius,
             tryHype: function (hyper) {
                 var colorDiff = Math.abs(this.color - hyper.color);
-                if (Math.random() < (1 - colorDiff / 256) / 4) {
+                if (Math.random() < (1 - colorDiff / 256) / 3) {
                     this.hype(hyper);
                 }
             },
@@ -61,8 +61,8 @@ for (var y = gridHeight; y--;) {
                     this.color = (hyper.color + (Math.random() - .5) * 20) | 0;
                     this.color = Math.max(0, Math.min(255, this.color));
                 } // adopt color with slight mutation
-                this.vx = -(this.x - hyper.x) * .05;
-                this.vy = -(this.y - hyper.y) * .05;
+                this.vx = -(this.x - hyper.x) * .04;
+                this.vy = -(this.y - hyper.y) * .04;
                 this.hyped = cooldown;
                 this.hypeR = 1
             }
