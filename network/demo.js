@@ -138,10 +138,10 @@ setInterval(function() {
         c.fillRect(250 + i * 2, 560 - spectrum[i] * 2, 2, spectrum[i] * 2);
     }
 
-    c.font = '30px serif';
+    c.font = '30px Trebuchet MS';
     c.fillStyle = '#fff';
     c.fillRect(240,560,530,1);
     c.fillStyle = '#fff';
-    c.fillText('Evolution of Hype', 390, 590);
+    c.fillText('Evolution of Hype', 390, 610);
     /// }
 }, 1000 / fps | 0);
