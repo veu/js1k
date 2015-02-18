@@ -4,9 +4,9 @@ offset = 20,
 spread = 25,
 
 // number of columns
-gridWidth = (a.width - offset * 2) / spread + 1 | 0,
+gridWidth = 40// (a.width - offset * 2) / spread + 1 | 0,
 // number of rows
-gridHeight = (a.height - offset * 2) / spread + 1 | 0,
+gridHeight = 20 //(a.height - offset * 2) / spread + 1 | 0,
 // hype cooldown in frames
 cooldown = 200,
 
@@ -19,6 +19,8 @@ minRadius = 10,
 maxRadius = 60,
 
 nodes = [],
+
+spectrum = {},
 
 getColor = function(col, op) {
     return 'rgba(' + [255, (255 - col), col, op || 1] + ')';
@@ -56,11 +58,13 @@ for (var y = gridHeight; y--;) {
                 }
             },
             hype: function (hyper) {
+                spectrum[this.color]--;
                 // a hyper hypes a hypee
                 if (hyper) {
                     this.color = (hyper.color + (Math.random() - .5) * 20) | 0;
                     this.color = Math.max(0, Math.min(255, this.color));
                 } // adopt color with slight mutation
+                spectrum[this.color]++;
                 this.vx = -(this.x - hyper.x) * .04;
                 this.vy = -(this.y - hyper.y) * .04;
                 this.hyped = cooldown;
@@ -68,6 +72,13 @@ for (var y = gridHeight; y--;) {
             }
         })
     }
+}
+
+for (var i = 0; i < 256; i++) {
+    spectrum[i] = 0;
+}
+for (var i in nodes) {
+    spectrum[nodes[i].color]++;
 }
 
 setInterval(function() {
@@ -113,5 +124,16 @@ setInterval(function() {
         c.strokeStyle = getColor(node.color); //'#f00';
         c.stroke();
     }
+
+    for (var i in spectrum) {
+        c.fillStyle = getColor(i);
+        c.fillRect(250 + i * 2, 560 - spectrum[i] * 2, 2, spectrum[i] * 2);
+    }
+
+    c.font = '30px serif';
+    c.fillStyle = '#fff';
+    c.fillRect(240,560,530,1);
+    c.fillStyle = '#fff';
+    c.fillText('Evolution of Hype', 390, 590);
     /// }
 }, 1000 / fps | 0);
