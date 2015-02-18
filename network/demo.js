@@ -1,12 +1,16 @@
+// size of used area
+width = 804,
+height = 640,
+
 // top and left offset
-offset = 20,
+offset = 40,
 // how far nodes are apart
 spread = 25,
 
 // number of columns
-gridWidth = 40// (a.width - offset * 2) / spread + 1 | 0,
+gridWidth = 30,
 // number of rows
-gridHeight = 20 //(a.height - offset * 2) / spread + 1 | 0,
+gridHeight = 20,
 // hype cooldown in frames
 cooldown = 200,
 
@@ -29,7 +33,7 @@ getColor = function(col, op) {
 },
 
 onclick = function (e) {
-    var i, node, mouse = {x: e.pageX, y: e.pageY};
+    var i, node, mouse = {x: e.pageX / scale - cOffset, y: e.pageY / scale};
     for (i in nodes) {
         node = nodes[i];
         if (node.distance(mouse) <= node.drawRadius()) {
@@ -112,9 +116,13 @@ setInterval(function() {
     /// }
 
     /// draw {
+    a.width = a.width;
+
     c.fillStyle = '#000';
     c.fillRect(0, 0, a.width, a.height);
 
+    c.scale(scale = Math.min(a.width / width, a.height / height), scale);
+    c.translate(cOffset = (a.width / scale - width) / 2, 0);
     for (i in nodes) {
         node = nodes[i];
         node.move();
@@ -135,13 +143,13 @@ setInterval(function() {
 
     for (var i in spectrum) {
         c.fillStyle = getColor(i);
-        c.fillRect(250 + i * 2, 560 - spectrum[i] * 2, 2, spectrum[i] * 2);
+        c.fillRect(147 + i * 2, 560 - spectrum[i] * 2, 2, spectrum[i] * 2);
     }
 
     c.font = '30px Trebuchet MS';
     c.fillStyle = '#fff';
-    c.fillRect(240,560,530,1);
+    c.fillRect(137,560,530,1);
     c.fillStyle = '#fff';
-    c.fillText('Evolution of Hype', 390, 610);
+    c.fillText('Evolution of Hype', 283, 610);
     /// }
 }, 1000 / fps | 0);
