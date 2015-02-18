@@ -17,6 +17,8 @@ fps = 30,
 minRadius = 10,
 // maximum radius for hype circles
 maxRadius = 60,
+// ticks since last hype
+idle = 150,
 
 nodes = [],
 
@@ -58,6 +60,7 @@ for (var y = gridHeight; y--;) {
                 }
             },
             hype: function (hyper) {
+                idle = 0;
                 spectrum[this.color]--;
                 // a hyper hypes a hypee
                 if (hyper) {
@@ -83,6 +86,11 @@ for (var i in nodes) {
 
 setInterval(function() {
     var i, k, node, node2, alive;
+
+    if (++idle == 200) {
+       node = nodes[Math.random() * 256 | 0];
+       node.hype(node);
+    }
 
     /// update {
     for (i in nodes) {
