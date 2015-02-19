@@ -23,7 +23,7 @@ getColor = function(color, op) {
 
 onclick = function (e) {
     nodes.some(function (node) {
-        if (node.distance({x: e.pageX / scale - cOffset, y: e.pageY / scale}) <= node.hypeRMax / 10) {
+        if (node.distance({x: e.pageX / scale - cOffset, y: e.pageY / scale}) <= node.hypeRMax) {
             node.hype(node);
             return 1
         }
@@ -42,7 +42,7 @@ for (y = 20; y--;)
             distance: function (p) { return Math.sqrt((x = this.x - p.x) * x + (y = this.y - p.y) * y, 2) },
             hyped: 0,
             hypeR: 0,
-            hypeRMax: Math.random() * 50 + 10 | 0,
+            hypeRMax: Math.random() * 5 + 1 | 0,
             hype: function (hyper) {
                 idle = 0;
                 spectrum[this.color]--;
@@ -83,7 +83,7 @@ setInterval(function(i, k, node, node2) {
                 });
        
                 // stop hype if it reached its maximum size
-                node.hypeR < node.hypeRMax || (node.hypeR = 0)
+                node.hypeR < node.hypeRMax * 10 || (node.hypeR = 0)
             }
         })
     /// }
@@ -97,16 +97,16 @@ setInterval(function(i, k, node, node2) {
         nodes.some(function (node) {
             node.move();
             c.beginPath();
-            c.arc(node.x + (node.hyped && Math.random() / 2), node.y + (node.hyped && Math.random() / 2), node.hypeRMax / 10, 0, 7, 0);
+            c.arc(node.x + (node.hyped && Math.random() / 2), node.y + (node.hyped && Math.random() / 2), node.hypeRMax, 0, 7, 0);
             c.fillStyle = getColor(node.color);
             c.fill();
     
             if (node.hypeR) {
                 c.beginPath();
-                c.arc(node.x, node.y, node.hypeR, 0, 7, 0); // hype moves with node.
-                c.fillStyle = getColor(node.color, (1 - node.hypeR / node.hypeRMax) * .5); //'#f00';
+                c.arc(node.x, node.y, node.hypeR, 0, 7, 0); 
+                c.fillStyle = getColor(node.color, .15);
                 c.fill();
-                c.strokeStyle = getColor(node.color); //'#f00';
+                c.strokeStyle = getColor(node.color);
                 c.stroke()
             }
         });
