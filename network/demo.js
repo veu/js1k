@@ -104,7 +104,7 @@ setInterval(function(e, f) {
                 c.arc(node.x, node.y, node.hypeR, 0, 7, 0); 
                 c.fillStyle = getColor(node.color, .15);
                 c.fill();
-                c.strokeStyle = getColor(node.color);
+                c.strokeStyle = getColor(node.color, .3);
                 c.stroke()
             }
         });
