@@ -13,6 +13,10 @@
       var c = a.getContext('2d');
       a.width = innerWidth;
       a.height = innerHeight;
+      var mathProperties = Object.getOwnPropertyNames(Math);
+      for (var i in mathProperties) {
+          window[mathProperties[i]] = Math[mathProperties[i]];
+      }
     </script>
     <script src="demo.js">
     </script>
