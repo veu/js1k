@@ -10,10 +10,6 @@ spread = 25,
 // hype cooldown in frames
 cooldown = 200,
 
-// minimum radius for hype circles
-minRadius = 10,
-// maximum radius for hype circles
-maxRadius = 60,
 // ticks since last hype
 idle = 150,
 
@@ -25,10 +21,9 @@ getColor = function(color, op) {
     return 'rgba(' + [255, 255 - color, color, op || 1] + ')';
 },
 
-onclick = function (e, i, node, mouse) {
-    mouse = {x: e.pageX / scale - cOffset, y: e.pageY / scale};
+onclick = function (e) {
     nodes.some(function (node) {
-        if (node.distance(mouse) <= node.drawRadius()) {
+        if (node.distance({x: e.pageX / scale - cOffset, y: e.pageY / scale}) <= node.hypeRMax / 10) {
             node.hype(node);
             return 1
         }
@@ -44,11 +39,10 @@ for (y = 20; y--;)
             y: y * spread + offset + Math.random() * 12 - 6,
             vx: 0, vy: 0,
             move: function() { this.x += this.vx; this.y += this.vy; this.vx *= .9; this.vy *= .9; },
-            drawRadius: function () { return this.hypeRMax / maxRadius * 6 },
             distance: function (p) { return Math.sqrt((x = this.x - p.x) * x + (y = this.y - p.y) * y, 2) },
             hyped: 0,
             hypeR: 0,
-            hypeRMax: Math.random() * (maxRadius - minRadius) + minRadius | 0,
+            hypeRMax: Math.random() * 50 + 10 | 0,
             hype: function (hyper) {
                 idle = 0;
                 spectrum[this.color]--;
@@ -56,8 +50,8 @@ for (y = 20; y--;)
                 this.color = hyper.color + Math.random() * 20 - 10 | 0;
                 this.color = Math.max(0, Math.min(255, this.color));
                 spectrum[this.color]++;
-                this.vx = (hyper.x - this.x) * .04;
-                this.vy = (hyper.y - this.y) * .04;
+                this.vx = (hyper.x - this.x) / 25;
+                this.vy = (hyper.y - this.y) / 25;
                 this.hyped = cooldown;
                 this.hypeR = 1
             }
@@ -103,7 +97,7 @@ setInterval(function(i, k, node, node2) {
         nodes.some(function (node) {
             node.move();
             c.beginPath();
-            c.arc(node.x + (node.hyped && Math.random() / 2), node.y + (node.hyped && Math.random() / 2), node.drawRadius(), 0, 7, 0);
+            c.arc(node.x + (node.hyped && Math.random() / 2), node.y + (node.hyped && Math.random() / 2), node.hypeRMax / 10, 0, 7, 0);
             c.fillStyle = getColor(node.color);
             c.fill();
     
