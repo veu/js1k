@@ -29,19 +29,17 @@ nodes = [],
 spectrum = {},
 
 getColor = function(col, op) {
-    return 'rgba(' + [255, (255 - col), col, op || 1] + ')';
+    return 'rgba(' + [255, 255 - col, col, op || 1] + ')';
 },
 
 onclick = function (e, i, node, mouse) {
     mouse = {x: e.pageX / scale - cOffset, y: e.pageY / scale};
-    for (i in nodes) {
-        node = nodes[i];
+    nodes.some(function (node) {
         if (node.distance(mouse) <= node.drawRadius()) {
             node.hype(node);
-            break;
+            return 1
         }
-
-    }
+    })
 }
 
 for (y = gridHeight; y--;) {
@@ -81,73 +79,68 @@ for (y = gridHeight; y--;) {
     }
 }
 
-for (i = 0; i < 256; i++) {
+for (i = 256; i--;)
     spectrum[i] = 0;
-}
-for (i in nodes) {
-    spectrum[nodes[i].color]++;
-}
+nodes.some(function (node) {
+    spectrum[node.color]++
+});
 
 setInterval(function(i, k, node, node2, alive) {
-    if (++idle == 200) {
-       node = nodes[Math.random() * 256 | 0];
-       node.hype(node);
-    }
-
     /// update {
-    for (i in nodes) {
-        node = nodes[i];
-        if (node.hyped) node.hyped--;
-
-        if (!node.hypeR) continue;
-
-        node.hypeR++;
-        for (k in nodes) {
-            node2 = nodes[k];
-            if (node2.hyped > 0 || Math.abs(node2.distance(node) - node.hypeR) > 2) continue;
-            node2.tryHype(node)
+        if (++idle == 200) {
+           node = nodes[Math.random() * 256 | 0];
+           node.hype(node);
         }
-
-        alive = node.hypeR < node.hypeRMax;
-        if (!alive) node.hypeR = 0
-    }
+    
+        nodes.some(function (node) {
+            if (node.hyped) node.hyped--;
+    
+            if (node.hypeR) {
+                node.hypeR++;
+                nodes.some(function (node2) {
+                    if (node2.hyped <= 0 && Math.abs(node2.distance(node) - node.hypeR) < 2)
+                        node2.tryHype(node)
+                });
+        
+                alive = node.hypeR < node.hypeRMax;
+                if (!alive) node.hypeR = 0
+            }
+        })
     /// }
 
     /// draw {
-    a.width = a.width;
-
-    c.fillStyle = '#000';
-    c.fillRect(0, 0, a.width, a.height);
-
-    c.scale(scale = Math.min(a.width / width, a.height / height), scale);
-    c.translate(cOffset = (a.width / scale - width) / 2, 0);
-    for (i in nodes) {
-        node = nodes[i];
-        node.move();
-        c.beginPath();
-        c.arc(node.x + (node.hyped && Math.random() / 2), node.y + (node.hyped && Math.random() / 2), node.drawRadius(), 0, 7, 0);
-        c.fillStyle = getColor(node.color);
-        c.fill();
-
-        if (!node.hypeR) continue;
-
-        c.beginPath();
-        c.arc(node.x, node.y, node.hypeR, 0, 7, 0); // hype moves with node.
-        c.fillStyle = getColor(node.color, (1 - node.hypeR / node.hypeRMax) * .5); //'#f00';
-        c.fill();
-        c.strokeStyle = getColor(node.color); //'#f00';
-        c.stroke();
-    }
-
-    for (i in spectrum) {
-        c.fillStyle = getColor(i);
-        c.fillRect(147 + i * 2, 560 - spectrum[i] * 2, 2, spectrum[i] * 2);
-    }
-
-    c.font = '30px Trebuchet MS';
-    c.fillStyle = '#fff';
-    c.fillRect(137,560,530,1);
-    c.fillStyle = '#fff';
-    c.fillText('Evolution of Hype', 283, 610);
+        a.width = a.width;
+    
+        c.fillStyle = '#000';
+        c.fillRect(0, 0, a.width, a.height);
+    
+        c.scale(scale = Math.min(a.width / width, a.height / height), scale);
+        c.translate(cOffset = (a.width / scale - width) / 2, 0);
+        nodes.some(function (node) {
+            node.move();
+            c.beginPath();
+            c.arc(node.x + (node.hyped && Math.random() / 2), node.y + (node.hyped && Math.random() / 2), node.drawRadius(), 0, 7, 0);
+            c.fillStyle = getColor(node.color);
+            c.fill();
+    
+            if (node.hypeR) {
+                c.beginPath();
+                c.arc(node.x, node.y, node.hypeR, 0, 7, 0); // hype moves with node.
+                c.fillStyle = getColor(node.color, (1 - node.hypeR / node.hypeRMax) * .5); //'#f00';
+                c.fill();
+                c.strokeStyle = getColor(node.color); //'#f00';
+                c.stroke()
+            }
+        });
+    
+        for (i = 256; i--;)
+            c.fillStyle = getColor(i),
+            c.fillRect(147 + i * 2, 560 - spectrum[i] * 2, 2, spectrum[i] * 2);
+    
+        c.font = '30px Trebuchet MS';
+        c.fillStyle = '#fff';
+        c.fillRect(137,560,530,1);
+        c.fillStyle = '#fff';
+        c.fillText('Evolution of Hype', 283, 610);
     /// }
-}, 1000 / fps | 0);
+}, 1000 / fps | 0)
