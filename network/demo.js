@@ -119,11 +119,11 @@ setInterval(function(i, k, node, node2) {
     
         for (i = 256; i--;)
             c.fillStyle = getColor(i),
-            c.fillRect(147 + i * 2, 560 - spectrum[i] * 2, 2, spectrum[i] * 2);
+            c.fillRect(147 + i * 2, 610 - spectrum[i] * 2, 2, spectrum[i] * 2);
     
         c.font = '30px Trebuchet MS';
         c.fillStyle = '#fff';
-        c.fillRect(137,560,530,1);
-        c.fillText('Evolution of Hype', 283, 610)
+        c.fillRect(137,610,530,1);
+        c.fillText('Evolution of Hype', 283, 570)
     /// }
 }, 33)
