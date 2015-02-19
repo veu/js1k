@@ -17,11 +17,11 @@ nodes = [],
 
 spectrum = [],
 
-getColor = function(color, op) {
-    return 'rgba(' + [255, 255 - color, color, op || 1] + ')';
+getColor = function(e, f) {
+    return 'rgba(' + [255, 255 - e, e, f || 1] + ')';
 },
 
-onclick = function (e) {
+onclick = function (e, f) {
     nodes.some(function (node) {
         if (node.distance({x: e.pageX / scale - cOffset, y: e.pageY / scale}) <= node.hypeRMax) {
             node.hype(node);
@@ -38,20 +38,20 @@ for (y = 20; y--;)
             x: x * spread + offset + Math.random() * 12 - 6,
             y: y * spread + offset + Math.random() * 12 - 6,
             vx: 0, vy: 0,
-            move: function() { this.x += this.vx; this.y += this.vy; this.vx *= .9; this.vy *= .9; },
-            distance: function (p) { return Math.sqrt((x = this.x - p.x) * x + (y = this.y - p.y) * y, 2) },
+            move: function(e, f) { this.x += this.vx; this.y += this.vy; this.vx *= .9; this.vy *= .9; },
+            distance: function (e, f) { return Math.sqrt((x = this.x - e.x) * x + (y = this.y - e.y) * y, 2) },
             hyped: 0,
             hypeR: 0,
             hypeRMax: Math.random() * 5 + 1 | 0,
-            hype: function (hyper) {
+            hype: function (node) {
                 idle = 0;
                 spectrum[this.color]--;
                 // adopt color with slight mutation
-                this.color = hyper.color + Math.random() * 20 - 10 | 0;
+                this.color = node.color + Math.random() * 20 - 10 | 0;
                 this.color = Math.max(0, Math.min(255, this.color));
                 spectrum[this.color]++;
-                this.vx = (hyper.x - this.x) / 25;
-                this.vy = (hyper.y - this.y) / 25;
+                this.vx = (node.x - this.x) / 25;
+                this.vy = (node.y - this.y) / 25;
                 this.hyped = cooldown;
                 this.hypeR = 1
             }
@@ -63,7 +63,7 @@ nodes.some(function (node) {
     spectrum[node.color]++
 });
 
-setInterval(function(i, k, node, node2) {
+setInterval(function(e, f) {
     /// update {
         if (++idle == 200) {
            node = nodes[Math.random() * 256 | 0];
