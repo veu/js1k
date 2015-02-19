@@ -11,24 +11,24 @@ module.exports = function(grunt) {
       }
     },
     mangle: {
-      reserved: 'acefkixyE', // can't use E because of Math.E -.-
+      reserved: 'acefxyE',
       names: [
         'color',
+        'cHeight',
+        'cOffset',
+        'cWidth',
         'distance',
-        'drawRadius',
         'getColor',
         'hype',
         'hyped',
         'hypeR',
         'hypeRMax',
         'idle',
-        'mouse',
         'move',
         'node',
         'nodes',
         'offset',
         'spectrum',
-        'spread',
         'vx',
         'vy',
       ]

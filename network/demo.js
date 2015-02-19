@@ -1,12 +1,8 @@
 // size of used area
-width = 804,
-height = 640,
-
+cWidth = 804,
+cHeight = 640,
 // top and left offset
 offset = 40,
-// how far nodes are apart
-spread = 25,
-
 // ticks since last hype
 idle = 150,
 
@@ -32,8 +28,8 @@ for (y = 20; y--;)
     for (x = 30; x--;)
         nodes.push({
             color: random() * 256 | 0,
-            x: x * spread + offset + random() * 12 - 6,
-            y: y * spread + offset + random() * 12 - 6,
+            x: x * 25 + offset + random() * 12 - 6,
+            y: y * 25 + offset + random() * 12 - 6,
             vx: 0, vy: 0,
             move: function(e, f) { this.x += this.vx; this.y += this.vy; this.vx *= .9; this.vy *= .9; },
             distance: function (e, f) { return sqrt((x = this.x - e.x) * x + (y = this.y - e.y) * y, 2) },
@@ -45,7 +41,7 @@ for (y = 20; y--;)
                 spectrum[this.color]--;
                 // adopt color with slight mutation
                 this.color = node.color + random() * 20 - 10 | 0;
-                this.color = max(0, min(255, this.color));
+                this.color = -min(0, -min(255, this.color));
                 spectrum[this.color]++;
                 this.vx = (node.x - this.x) / 25;
                 this.vy = (node.y - this.y) / 25;
@@ -55,8 +51,8 @@ for (y = 20; y--;)
             }
         })
 
-for (i = 256; i--;)
-    spectrum[i] = 0;
+for (e = 256; e--;)
+    spectrum[e] = 0;
 nodes.some(function (node) {
     spectrum[node.color]++
 });
@@ -75,7 +71,7 @@ setInterval(function(e, f) {
                 node.hypeR++;
                 nodes.some(function (e, f) {
                     e.hyped <= 0 &&
-                        abs(e.distance(node) - node.hypeR) < 2 &&
+                        abs(node.distance(e) - node.hypeR) < 2 &&
                         random() * 3 < 1 - abs(e.color - node.color) / 256 &&
                         e.hype(node)
                 });
@@ -89,8 +85,8 @@ setInterval(function(e, f) {
     /// draw {
         a.width = a.width;
         c.fillRect(0, 0, a.width, a.height);
-        c.scale(scale = min(a.width / width, a.height / height), scale);
-        c.translate(cOffset = (a.width / scale - width) / 2, 0);
+        c.scale(scale = min(a.width / cWidth, a.height / cHeight), scale);
+        c.translate(cOffset = (a.width / scale - cWidth) / 2, 0);
 
         nodes.some(function (node) {
             node.move();
@@ -109,9 +105,9 @@ setInterval(function(e, f) {
             }
         });
     
-        for (i = 256; i--;)
-            c.fillStyle = getColor(i),
-            c.fillRect(147 + i * 2, 610 - spectrum[i] * 2, 2, spectrum[i] * 2);
+        for (e = 256; e--;)
+            c.fillStyle = getColor(e),
+            c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 2, spectrum[e] * 2);
     
         c.font = '30px Trebuchet MS';
         c.fillStyle = '#fff';
