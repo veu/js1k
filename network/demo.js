@@ -7,15 +7,8 @@ offset = 40,
 // how far nodes are apart
 spread = 25,
 
-// number of columns
-gridWidth = 30,
-// number of rows
-gridHeight = 20,
 // hype cooldown in frames
 cooldown = 200,
-
-// simulation speed
-fps = 30,
 
 // minimum radius for hype circles
 minRadius = 10,
@@ -26,10 +19,10 @@ idle = 150,
 
 nodes = [],
 
-spectrum = {},
+spectrum = [],
 
-getColor = function(col, op) {
-    return 'rgba(' + [255, 255 - col, col, op || 1] + ')';
+getColor = function(color, op) {
+    return 'rgba(' + [255, 255 - color, color, op || 1] + ')';
 },
 
 onclick = function (e, i, node, mouse) {
@@ -42,42 +35,33 @@ onclick = function (e, i, node, mouse) {
     })
 }
 
-for (y = gridHeight; y--;) {
-    for (x = gridWidth; x--;) {
+/// setup grid
+for (y = 20; y--;)
+    for (x = 30; x--;)
         nodes.push({
             color: Math.random() * 256 | 0,
-            x: x * spread + offset + (Math.random() - .5) * 12,
-            y: y * spread + offset + (Math.random() - .5) * 12,
+            x: x * spread + offset + Math.random() * 12 - 6,
+            y: y * spread + offset + Math.random() * 12 - 6,
             vx: 0, vy: 0,
             move: function() { this.x += this.vx; this.y += this.vy; this.vx *= .9; this.vy *= .9; },
-            drawRadius: function () { return this.hypeRMax / maxRadius * 6; },
-            distance: function (p) { return Math.sqrt((x = this.x - p.x) * x + (y = this.y - p.y) * y, 2); },
+            drawRadius: function () { return this.hypeRMax / maxRadius * 6 },
+            distance: function (p) { return Math.sqrt((x = this.x - p.x) * x + (y = this.y - p.y) * y, 2) },
             hyped: 0,
             hypeR: 0,
-            hypeRMax: (Math.random() * (maxRadius - minRadius) | 0) + minRadius,
-            tryHype: function (hyper) {
-                colorDiff = Math.abs(this.color - hyper.color);
-                if (Math.random() < (1 - colorDiff / 256) / 3) {
-                    this.hype(hyper);
-                }
-            },
+            hypeRMax: Math.random() * (maxRadius - minRadius) + minRadius | 0,
             hype: function (hyper) {
                 idle = 0;
                 spectrum[this.color]--;
-                // a hyper hypes a hypee
-                if (hyper) {
-                    this.color = (hyper.color + (Math.random() - .5) * 20) | 0;
-                    this.color = Math.max(0, Math.min(255, this.color));
-                } // adopt color with slight mutation
+                // adopt color with slight mutation
+                this.color = hyper.color + Math.random() * 20 - 10 | 0;
+                this.color = Math.max(0, Math.min(255, this.color));
                 spectrum[this.color]++;
-                this.vx = -(this.x - hyper.x) * .04;
-                this.vy = -(this.y - hyper.y) * .04;
+                this.vx = (hyper.x - this.x) * .04;
+                this.vy = (hyper.y - this.y) * .04;
                 this.hyped = cooldown;
                 this.hypeR = 1
             }
         })
-    }
-}
 
 for (i = 256; i--;)
     spectrum[i] = 0;
@@ -85,7 +69,7 @@ nodes.some(function (node) {
     spectrum[node.color]++
 });
 
-setInterval(function(i, k, node, node2, alive) {
+setInterval(function(i, k, node, node2) {
     /// update {
         if (++idle == 200) {
            node = nodes[Math.random() * 256 | 0];
@@ -98,24 +82,24 @@ setInterval(function(i, k, node, node2, alive) {
             if (node.hypeR) {
                 node.hypeR++;
                 nodes.some(function (node2) {
-                    if (node2.hyped <= 0 && Math.abs(node2.distance(node) - node.hypeR) < 2)
-                        node2.tryHype(node)
+                    node2.hyped <= 0 &&
+                        Math.abs(node2.distance(node) - node.hypeR) < 2 &&
+                        Math.random() * 3 < 1 - Math.abs(node2.color - node.color) / 256 &&
+                        node2.hype(node)
                 });
-        
-                alive = node.hypeR < node.hypeRMax;
-                if (!alive) node.hypeR = 0
+       
+                // stop hype if it reached its maximum size
+                node.hypeR < node.hypeRMax || (node.hypeR = 0)
             }
         })
     /// }
 
     /// draw {
         a.width = a.width;
-    
-        c.fillStyle = '#000';
         c.fillRect(0, 0, a.width, a.height);
-    
         c.scale(scale = Math.min(a.width / width, a.height / height), scale);
         c.translate(cOffset = (a.width / scale - width) / 2, 0);
+
         nodes.some(function (node) {
             node.move();
             c.beginPath();
@@ -140,7 +124,6 @@ setInterval(function(i, k, node, node2, alive) {
         c.font = '30px Trebuchet MS';
         c.fillStyle = '#fff';
         c.fillRect(137,560,530,1);
-        c.fillStyle = '#fff';
-        c.fillText('Evolution of Hype', 283, 610);
+        c.fillText('Evolution of Hype', 283, 610)
     /// }
-}, 1000 / fps | 0)
+}, 33)
