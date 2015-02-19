@@ -7,9 +7,6 @@ offset = 40,
 // how far nodes are apart
 spread = 25,
 
-// hype cooldown in frames
-cooldown = 200,
-
 // ticks since last hype
 idle = 150,
 
@@ -34,25 +31,26 @@ onclick = function (e, f) {
 for (y = 20; y--;)
     for (x = 30; x--;)
         nodes.push({
-            color: Math.random() * 256 | 0,
-            x: x * spread + offset + Math.random() * 12 - 6,
-            y: y * spread + offset + Math.random() * 12 - 6,
+            color: random() * 256 | 0,
+            x: x * spread + offset + random() * 12 - 6,
+            y: y * spread + offset + random() * 12 - 6,
             vx: 0, vy: 0,
             move: function(e, f) { this.x += this.vx; this.y += this.vy; this.vx *= .9; this.vy *= .9; },
-            distance: function (e, f) { return Math.sqrt((x = this.x - e.x) * x + (y = this.y - e.y) * y, 2) },
+            distance: function (e, f) { return sqrt((x = this.x - e.x) * x + (y = this.y - e.y) * y, 2) },
             hyped: 0,
             hypeR: 0,
-            hypeRMax: Math.random() * 5 + 1 | 0,
+            hypeRMax: random() * 5 + 1 | 0,
             hype: function (node) {
                 idle = 0;
                 spectrum[this.color]--;
                 // adopt color with slight mutation
-                this.color = node.color + Math.random() * 20 - 10 | 0;
-                this.color = Math.max(0, Math.min(255, this.color));
+                this.color = node.color + random() * 20 - 10 | 0;
+                this.color = max(0, min(255, this.color));
                 spectrum[this.color]++;
                 this.vx = (node.x - this.x) / 25;
                 this.vy = (node.y - this.y) / 25;
-                this.hyped = cooldown;
+                // set how long the node will be hyped
+                this.hyped = 200;
                 this.hypeR = 1
             }
         })
@@ -66,7 +64,7 @@ nodes.some(function (node) {
 setInterval(function(e, f) {
     /// update {
         if (++idle == 200) {
-           node = nodes[Math.random() * 256 | 0];
+           node = nodes[random() * 256 | 0];
            node.hype(node);
         }
     
@@ -75,11 +73,11 @@ setInterval(function(e, f) {
     
             if (node.hypeR) {
                 node.hypeR++;
-                nodes.some(function (node2) {
-                    node2.hyped <= 0 &&
-                        Math.abs(node2.distance(node) - node.hypeR) < 2 &&
-                        Math.random() * 3 < 1 - Math.abs(node2.color - node.color) / 256 &&
-                        node2.hype(node)
+                nodes.some(function (e, f) {
+                    e.hyped <= 0 &&
+                        abs(e.distance(node) - node.hypeR) < 2 &&
+                        random() * 3 < 1 - abs(e.color - node.color) / 256 &&
+                        e.hype(node)
                 });
        
                 // stop hype if it reached its maximum size
@@ -91,13 +89,13 @@ setInterval(function(e, f) {
     /// draw {
         a.width = a.width;
         c.fillRect(0, 0, a.width, a.height);
-        c.scale(scale = Math.min(a.width / width, a.height / height), scale);
+        c.scale(scale = min(a.width / width, a.height / height), scale);
         c.translate(cOffset = (a.width / scale - width) / 2, 0);
 
         nodes.some(function (node) {
             node.move();
             c.beginPath();
-            c.arc(node.x + (node.hyped && Math.random() / 2), node.y + (node.hyped && Math.random() / 2), node.hypeRMax, 0, 7, 0);
+            c.arc(node.x + (node.hyped && random() / 2), node.y + (node.hyped && random() / 2), node.hypeRMax, 0, 7, 0);
             c.fillStyle = getColor(node.color);
             c.fill();
     

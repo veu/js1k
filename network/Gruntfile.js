@@ -14,7 +14,6 @@ module.exports = function(grunt) {
       reserved: 'acefkixyE', // can't use E because of Math.E -.-
       names: [
         'color',
-        'cooldown',
         'distance',
         'drawRadius',
         'getColor',
@@ -26,7 +25,6 @@ module.exports = function(grunt) {
         'mouse',
         'move',
         'node',
-        'node2',
         'nodes',
         'offset',
         'spectrum',
