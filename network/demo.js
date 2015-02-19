@@ -32,8 +32,8 @@ getColor = function(col, op) {
     return 'rgba(' + [255, (255 - col), col, op || 1] + ')';
 },
 
-onclick = function (e) {
-    var i, node, mouse = {x: e.pageX / scale - cOffset, y: e.pageY / scale};
+onclick = function (e, i, node, mouse) {
+    mouse = {x: e.pageX / scale - cOffset, y: e.pageY / scale};
     for (i in nodes) {
         node = nodes[i];
         if (node.distance(mouse) <= node.drawRadius()) {
@@ -44,8 +44,8 @@ onclick = function (e) {
     }
 }
 
-for (var y = gridHeight; y--;) {
-    for (var x = gridWidth; x--;) {
+for (y = gridHeight; y--;) {
+    for (x = gridWidth; x--;) {
         nodes.push({
             color: Math.random() * 256 | 0,
             x: x * spread + offset + (Math.random() - .5) * 12,
@@ -58,7 +58,7 @@ for (var y = gridHeight; y--;) {
             hypeR: 0,
             hypeRMax: (Math.random() * (maxRadius - minRadius) | 0) + minRadius,
             tryHype: function (hyper) {
-                var colorDiff = Math.abs(this.color - hyper.color);
+                colorDiff = Math.abs(this.color - hyper.color);
                 if (Math.random() < (1 - colorDiff / 256) / 3) {
                     this.hype(hyper);
                 }
@@ -81,16 +81,14 @@ for (var y = gridHeight; y--;) {
     }
 }
 
-for (var i = 0; i < 256; i++) {
+for (i = 0; i < 256; i++) {
     spectrum[i] = 0;
 }
-for (var i in nodes) {
+for (i in nodes) {
     spectrum[nodes[i].color]++;
 }
 
-setInterval(function() {
-    var i, k, node, node2, alive;
-
+setInterval(function(i, k, node, node2, alive) {
     if (++idle == 200) {
        node = nodes[Math.random() * 256 | 0];
        node.hype(node);
@@ -141,7 +139,7 @@ setInterval(function() {
         c.stroke();
     }
 
-    for (var i in spectrum) {
+    for (i in spectrum) {
         c.fillStyle = getColor(i);
         c.fillRect(147 + i * 2, 560 - spectrum[i] * 2, 2, spectrum[i] * 2);
     }
