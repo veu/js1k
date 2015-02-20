@@ -5,7 +5,7 @@ cHeight = 640,
 offset = 40,
 // ticks since last hype
 idle = 150,
-
+numNodes = 400,
 nodes = [],
 
 spectrum = [],
@@ -24,12 +24,18 @@ onclick = function (e, f) {
 }
 
 /// setup grid
-for (y = 20; y--;)
-    for (x = 30; x--;)
+for (y = numNodes; y--;) // 20
+    // for (x = 30; x--;) // 30
         nodes.push({
             color: random() * 256 | 0,
-            x: x * 25 + offset + random() * 12 - 6,
-            y: y * 25 + offset + random() * 12 - 6,
+            // x: x * 25 + offset + random() * 12 - 6,
+            // y: y * 25 + offset + random() * 12 - 6,
+
+            x: offset + random() * (cWidth - offset * 2),
+            y: offset + random() * 500,
+
+
+
             vx: 0, vy: 0,
             move: function(e, f) { this.x += this.vx; this.y += this.vy; this.vx *= .9; this.vy *= .9; },
             distance: function (e, f) { return sqrt((x = this.x - e.x) * x + (y = this.y - e.y) * y, 2) },
@@ -60,13 +66,16 @@ nodes.some(function (node) {
 setInterval(function(e, f) {
     /// update {
         if (++idle == 200) {
-           node = nodes[random() * 256 | 0];
+           node = nodes[random() * numNodes | 0];
            node.hype(node);
         }
-    
+
         nodes.some(function (node) {
+
+            // can this loop be moved to line 103 ?
+
             if (node.hyped) node.hyped--;
-    
+
             if (node.hypeR) {
                 node.hypeR++;
                 nodes.some(function (e, f) {
@@ -75,7 +84,7 @@ setInterval(function(e, f) {
                         random() * 3 < 1 - abs(e.color - node.color) / 256 &&
                         e.hype(node)
                 });
-       
+
                 // stop hype if it reached its maximum size
                 node.hypeR < node.hypeRMax * 10 || (node.hypeR = 0)
             }
@@ -89,26 +98,54 @@ setInterval(function(e, f) {
         c.translate(cOffset = (a.width / scale - cWidth) / 2, 0);
 
         nodes.some(function (node) {
+
+            if (node.dead) return; // not sure why this didn't work.
+
             node.move();
-            c.beginPath();
-            c.arc(node.x + (node.hyped && random() / 2), node.y + (node.hyped && random() / 2), node.hypeRMax, 0, 7, 0);
-            c.fillStyle = getColor(node.color);
-            c.fill();
-    
+
+            // move here? - see line 75
+
+
+            // distace compare... merge nodes
+            nodes.some(function (other, f) {
+
+                // debug lines.
+                // c.beginPath();
+                // c.strokeStyle = "rgba(255,0,0,0.3)";
+                // c.lineWidth = 0.5;
+                // c.moveTo(node.x, node.y);
+                // c.lineTo(other.x, other.y);
+                // c.stroke();
+                // c.closePath();
+
+                if (node != other && abs(node.distance(other)) < 10) {
+                    other.x = node.x, other.y = node.y, other.dead = true // delete other node?
+                }
+
+            });
+
+
+
+            for(e = 2; e--;)
+                c.beginPath(),
+                c.arc(node.x + random() * node.hyped * .01, node.y + random() * node.hyped * .01, node.hypeRMax * (e * 3 + 1), 0, 7, 0),
+                c.fillStyle = getColor(node.color, e * .1),
+                c.fill();
+
             if (node.hypeR) {
                 c.beginPath();
-                c.arc(node.x, node.y, node.hypeR, 0, 7, 0); 
+                c.arc(node.x, node.y, node.hypeR, 0, 7, 0);
                 c.fillStyle = getColor(node.color, .15);
                 c.fill();
                 c.strokeStyle = getColor(node.color, .3);
                 c.stroke()
             }
         });
-    
+
         for (e = 256; e--;)
             c.fillStyle = getColor(e),
             c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 2, spectrum[e] * 2);
-    
+
         c.font = '30px Trebuchet MS';
         c.fillStyle = '#fff';
         c.fillRect(137,610,530,1);
