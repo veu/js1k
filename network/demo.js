@@ -90,10 +90,11 @@ setInterval(function(e, f) {
 
         nodes.some(function (node) {
             node.move();
-            c.beginPath();
-            c.arc(node.x + (node.hyped && random() / 2), node.y + (node.hyped && random() / 2), node.hypeRMax, 0, 7, 0);
-            c.fillStyle = getColor(node.color);
-            c.fill();
+            for (e = 2; e--;)
+                c.beginPath(),
+                c.arc(node.x + random() * node.hyped * .01, node.y + random() * node.hyped * .01, node.hypeRMax * (e * 2 + 1), 0, 7, 0),
+                c.fillStyle = getColor(node.color, e * .1),
+                c.fill();
     
             if (node.hypeR) {
                 c.beginPath();
