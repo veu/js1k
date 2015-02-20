@@ -63,8 +63,16 @@ setInterval(function(e, f) {
     c.translate(offset = (a.width / scale - cWidth) / 2, 0),
 
     nodes.some(function (node) {
-        /// update node
         if (node.hyped) node.hyped--;
+
+        node.x += node.vx *= .9;
+        node.y += node.vy *= .9;
+
+        for (e = 2; e--;)
+            c.beginPath(),
+            c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.hypeRMax * (e * 2 + 1), 0, 7, 0),
+            c.fillStyle = getColor(node.color, e * .1),
+            c.fill();
 
         if (node.hypeR) {
             node.hypeR++;
@@ -78,24 +86,14 @@ setInterval(function(e, f) {
             // stop hype if it reached its maximum size
             if (node.hypeR > node.hypeRMax * 10)
                 node.hypeR = 0
-        }
-        node.x += node.vx *= .9;
-        node.y += node.vy *= .9;
 
-        /// draw node
-        for (e = 2; e--;)
-            c.beginPath(),
-            c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.hypeRMax * (e * 2 + 1), 0, 7, 0),
-            c.fillStyle = getColor(node.color, e * .1),
-            c.fill();
-
-        if (node.hypeR)
             c.beginPath(),
             c.arc(node.x, node.y, node.hypeR, 0, 7, 0),
             c.fillStyle = getColor(node.color, .15),
             c.fill(),
             c.strokeStyle = getColor(node.color, .3),
             c.stroke()
+        }
     });
 
     for (e = 256; e--;)
