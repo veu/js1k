@@ -16,10 +16,9 @@ getColor = function(e, f) {
 
 onclick = function (e, f) {
     nodes.some(function (node) {
-        if (node.distance({x: e.pageX / scale - cOffset, y: e.pageY / scale}) <= node.hypeRMax) {
-            node.hype(node);
-            return 1
-        }
+        return node.distance({x: e.pageX / scale - cOffset, y: e.pageY / scale}) <= node.hypeRMax
+            ? node.hype(node) | 1
+            : 0
     })
 }
 
@@ -41,7 +40,7 @@ for (y = 20; y--;)
                 spectrum[this.color]--;
                 // adopt color with slight mutation
                 this.color = node.color + random() * 20 - 10 | 0;
-                this.color = -min(0, -min(255, this.color));
+                this.color = -min(0, -min(255, this.color)),
                 spectrum[this.color]++;
                 this.vx = (node.x - this.x) / 25;
                 this.vy = (node.y - this.y) / 25;
@@ -56,18 +55,18 @@ for (e = 256; e--;)
 
 nodes.some(function (node) {
     spectrum[node.color]++
-});
+}),
 
 setInterval(function(e, f) {
     if (++idle == 200) {
        node = nodes[random() * 256 | 0];
-       node.hype(node);
+       node.hype(node)
     }
 
     a.width = a.width;
-    c.fillRect(0, 0, a.width, a.height);
-    c.scale(scale = min(a.width / cWidth, a.height / cHeight), scale);
-    c.translate(cOffset = (a.width / scale - cWidth) / 2, 0);
+    c.fillRect(0, 0, a.width, a.height),
+    c.scale(scale = min(a.width / cWidth, a.height / cHeight), scale),
+    c.translate(cOffset = (a.width / scale - cWidth) / 2, 0),
 
     nodes.some(function (node) {
         /// update node
@@ -94,14 +93,13 @@ setInterval(function(e, f) {
             c.fillStyle = getColor(node.color, e * .1),
             c.fill();
 
-        if (node.hypeR) {
-            c.beginPath();
-            c.arc(node.x, node.y, node.hypeR, 0, 7, 0);
-            c.fillStyle = getColor(node.color, .15);
-            c.fill();
-            c.strokeStyle = getColor(node.color, .3);
+        if (node.hypeR)
+            c.beginPath(),
+            c.arc(node.x, node.y, node.hypeR, 0, 7, 0),
+            c.fillStyle = getColor(node.color, .15),
+            c.fill(),
+            c.strokeStyle = getColor(node.color, .3),
             c.stroke()
-        }
     });
 
     for (e = 256; e--;)
@@ -110,6 +108,6 @@ setInterval(function(e, f) {
 
     c.font = '30px Trebuchet MS';
     c.fillStyle = '#fff';
-    c.fillRect(137,610,530,1);
+    c.fillRect(137,610,530,1),
     c.fillText('Evolution of Hype', 283, 570)
 }, 33)
