@@ -27,8 +27,8 @@ for (y = 20; y--;)
     for (x = 30; x--;)
         nodes.push({
             color: random() * 256 | 0,
-            x: x * 25 + offset + random() * 12 - 6,
-            y: y * 25 + offset + random() * 12 - 6,
+            x: x * 25 + offset + random() * 20 - 10,
+            y: y * 25 + offset + random() * 20 - 10,
             vx: 0, vy: 0,
             move: function(e, f) { this.x += this.vx; this.y += this.vy; this.vx *= .9; this.vy *= .9; },
             distance: function (e, f) { return sqrt((x = this.x - e.x) * x + (y = this.y - e.y) * y, 2) },
