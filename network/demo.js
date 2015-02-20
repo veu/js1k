@@ -1,13 +1,10 @@
 // size of used area
 cWidth = 804,
 cHeight = 640,
-// top and left offset
-offset = 40,
 // ticks since last hype
 idle = 150,
 
 nodes = [],
-
 spectrum = [],
 
 getColor = function(e, f) {
@@ -16,9 +13,8 @@ getColor = function(e, f) {
 
 onclick = function (e, f) {
     nodes.some(function (node) {
-        return node.distance({x: e.pageX / scale - cOffset, y: e.pageY / scale}) <= node.hypeRMax
-            ? node.hype(node) | 1
-            : 0
+        return node.distance({x: e.pageX / scale - offset, y: e.pageY / scale}) <= node.hypeRMax
+            && node.hype(node) | 1
     })
 }
 
@@ -26,21 +22,25 @@ onclick = function (e, f) {
 for (y = 20; y--;)
     for (x = 30; x--;)
         nodes.push({
-            color: random() * 256 | 0,
-            x: x * 25 + offset + random() * 20 - 10,
-            y: y * 25 + offset + random() * 20 - 10,
+            color: 256 * random() | 0,
+            x: x * 25 + 40 + 20 * random() - 10,
+            y: y * 25 + 40 + 20 * random() - 10,
             vx: 0, vy: 0,
-            move: function(e, f) { this.x += this.vx; this.y += this.vy; this.vx *= .9; this.vy *= .9; },
-            distance: function (e, f) { return sqrt((x = this.x - e.x) * x + (y = this.y - e.y) * y, 2) },
+            move: function(e, f) {
+                this.x += this.vx *= .9;
+                this.y += this.vy *= .9
+            },
+            distance: function (e, f) {
+                return sqrt((x = this.x - e.x) * x + (y = this.y - e.y) * y, 2)
+            },
             hyped: 0,
             hypeR: 0,
-            hypeRMax: random() * 5 + 1 | 0,
+            hypeRMax: 5 * random() + 1 | 0,
             hype: function (node) {
                 idle = 0;
                 spectrum[this.color]--;
                 // adopt color with slight mutation
-                this.color = node.color + random() * 20 - 10 | 0;
-                this.color = -min(0, -min(255, this.color)),
+                this.color = -min(0, -min(255, node.color + 20 * random() - 10 | 0)),
                 spectrum[this.color]++;
                 this.vx = (node.x - this.x) / 25;
                 this.vy = (node.y - this.y) / 25;
@@ -48,7 +48,7 @@ for (y = 20; y--;)
                 this.hyped = 200;
                 this.hypeR = 1
             }
-        })
+        });
 
 for (e = 256; e--;)
     spectrum[e] = 0;
@@ -59,14 +59,14 @@ nodes.some(function (node) {
 
 setInterval(function(e, f) {
     if (++idle == 200) {
-       node = nodes[random() * 256 | 0];
+       node = nodes[256 * random() | 0];
        node.hype(node)
     }
 
     a.width = a.width;
     c.fillRect(0, 0, a.width, a.height),
     c.scale(scale = min(a.width / cWidth, a.height / cHeight), scale),
-    c.translate(cOffset = (a.width / scale - cWidth) / 2, 0),
+    c.translate(offset = (a.width / scale - cWidth) / 2, 0),
 
     nodes.some(function (node) {
         /// update node
@@ -77,7 +77,7 @@ setInterval(function(e, f) {
             nodes.some(function (e, f) {
                 e.hyped <= 0 &&
                     abs(node.distance(e) - node.hypeR) < 2 &&
-                    random() * 3 < 1 - abs(e.color - node.color) / 256 &&
+                    3 * random() < 1 - abs(e.color - node.color) / 256 &&
                     e.hype(node)
             });
 
@@ -89,7 +89,7 @@ setInterval(function(e, f) {
         node.move();
         for (e = 2; e--;)
             c.beginPath(),
-            c.arc(node.x + random() * node.hyped * .01, node.y + random() * node.hyped * .01, node.hypeRMax * (e * 2 + 1), 0, 7, 0),
+            c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.hypeRMax * (e * 2 + 1), 0, 7, 0),
             c.fillStyle = getColor(node.color, e * .1),
             c.fill();
 

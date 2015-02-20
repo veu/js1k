@@ -15,7 +15,6 @@ module.exports = function(grunt) {
       names: [
         'color',
         'cHeight',
-        'cOffset',
         'cWidth',
         'distance',
         'getColor',
