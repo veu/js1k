@@ -90,7 +90,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('copy-shim', function() {
     var fs = require('fs'),
-        demo = fs.readFileSync('build/demo.zip.js', {encoding: 'utf8'}),
+        demo = fs.readFileSync('build/demo.zip.js'),
         shim = fs.readFileSync('shim.html', {encoding: 'utf8'});
     shim = shim.replace('%DEMO%', demo);
     fs.writeFileSync('build/shim.html', shim);
