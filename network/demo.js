@@ -13,9 +13,25 @@ getColor = function(e, f) {
 
 onclick = function (e, f) {
     nodes.some(function (node) {
-        return node.distance({x: e.pageX / scale - offset, y: e.pageY / scale}) <= node.hypeRMax
-            && node.hype(node) | 1
+        return distance(node, {x: e.pageX / scale - offset, y: e.pageY / scale}) <= node.hypeRMax
+            && hype(node, node) | 1
     })
+},
+
+distance = function (e, f) {
+    return sqrt((x = e.x - f.x) * x + (y = e.y - f.y) * y, 2)
+},
+
+hype = function (e, f) {
+    spectrum[f.color]--;
+    // adopt color with slight mutation
+    f.color = -min(idle = 0, -min(255, e.color + 20 * random() - 10 | 0)),
+    spectrum[f.color]++;
+    f.vx = (e.x - f.x) / 25;
+    f.vy = (e.y - f.y) / 25;
+    // set how long the node will be hyped
+    f.hyped = 200;
+    f.hypeR = 1
 }
 
 /// setup grid
@@ -26,28 +42,9 @@ for (y = 20; y--;)
             x: x * 25 + 40 + 20 * random() - 10,
             y: y * 25 + 40 + 20 * random() - 10,
             vx: 0, vy: 0,
-            move: function(e, f) {
-                this.x += this.vx *= .9;
-                this.y += this.vy *= .9
-            },
-            distance: function (e, f) {
-                return sqrt((x = this.x - e.x) * x + (y = this.y - e.y) * y, 2)
-            },
             hyped: 0,
             hypeR: 0,
-            hypeRMax: 5 * random() + 1 | 0,
-            hype: function (node) {
-                idle = 0;
-                spectrum[this.color]--;
-                // adopt color with slight mutation
-                this.color = -min(0, -min(255, node.color + 20 * random() - 10 | 0)),
-                spectrum[this.color]++;
-                this.vx = (node.x - this.x) / 25;
-                this.vy = (node.y - this.y) / 25;
-                // set how long the node will be hyped
-                this.hyped = 200;
-                this.hypeR = 1
-            }
+            hypeRMax: 5 * random() + 1 | 0
         });
 
 for (e = 256; e--;)
@@ -58,13 +55,10 @@ nodes.some(function (node) {
 }),
 
 setInterval(function(e, f) {
-    if (++idle == 200) {
-       node = nodes[256 * random() | 0];
-       node.hype(node)
-    }
+    if (++idle == 200)
+       hype(node = nodes[256 * random() | 0], node);
 
-    a.width = a.width;
-    c.fillRect(0, 0, a.width, a.height),
+    c.fillRect(0, 0, a.width = a.width, a.height),
     c.scale(scale = min(a.width / cWidth, a.height / cHeight), scale),
     c.translate(offset = (a.width / scale - cWidth) / 2, 0),
 
@@ -75,18 +69,20 @@ setInterval(function(e, f) {
         if (node.hypeR) {
             node.hypeR++;
             nodes.some(function (e, f) {
-                e.hyped <= 0 &&
-                    abs(node.distance(e) - node.hypeR) < 2 &&
+                e.hyped ||
+                    abs(distance(node, e) - node.hypeR) < 2 &&
                     3 * random() < 1 - abs(e.color - node.color) / 256 &&
-                    e.hype(node)
+                    hype(node, e)
             });
 
             // stop hype if it reached its maximum size
-            node.hypeR < node.hypeRMax * 10 || (node.hypeR = 0)
+            if (node.hypeR > node.hypeRMax * 10)
+                node.hypeR = 0
         }
+        node.x += node.vx *= .9;
+        node.y += node.vy *= .9;
 
         /// draw node
-        node.move();
         for (e = 2; e--;)
             c.beginPath(),
             c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.hypeRMax * (e * 2 + 1), 0, 7, 0),
@@ -108,6 +104,6 @@ setInterval(function(e, f) {
 
     c.font = '30px Trebuchet MS';
     c.fillStyle = '#fff';
-    c.fillRect(137,610,530,1),
+    c.fillRect(137, 610, 530, 1),
     c.fillText('Evolution of Hype', 283, 570)
 }, 33)

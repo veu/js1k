@@ -23,7 +23,6 @@ module.exports = function(grunt) {
         'hypeR',
         'hypeRMax',
         'idle',
-        'move',
         'node',
         'nodes',
         'offset',
