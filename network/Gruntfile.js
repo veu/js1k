@@ -17,6 +17,7 @@ module.exports = function(grunt) {
         'addColor',
         'color',
         'cHeight',
+        'cScale',
         'cWidth',
         'distance',
         'hype',

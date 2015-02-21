@@ -8,12 +8,12 @@ nodes = [],
 spectrum = [],
 
 addColor = function (e, f, g, h) {
-    e.addColorStop(f, 'rgba(' + [255, 255 - g, g, h] + ')')
+    g.addColorStop(f, 'rgba(' + [255, 255 - e, e, h] + ')')
 },
 
 onclick = function (e, f, g, h) {
     nodes.some(function (node) {
-        return distance(node, {x: e.pageX / scale - offset, y: e.pageY / scale}) <= node.hypeRMax
+        return distance(node, {x: e.pageX / cScale - offset, y: e.pageY / cScale}) <= node.hypeRMax
             && hype(node, node) | 1
     })
 },
@@ -60,8 +60,8 @@ setInterval(function (e, f, g, h) {
         hype(node = nodes[256 * random() | 0], node);
 
     c.fillRect(0, 0, a.width = a.width, a.height),
-    c.scale(scale = min(a.width / cWidth, a.height / cHeight), scale),
-    c.translate(offset = (a.width / scale - cWidth) / 2, 0),
+    c.scale(cScale = min(a.width / cWidth, a.height / cHeight), cScale),
+    c.translate(offset = (a.width / cScale - cWidth) / 2, 0),
 
     nodes.some(function (node) {
         if (node.hyped) node.hyped--;
@@ -78,9 +78,8 @@ setInterval(function (e, f, g, h) {
             node.hypeR = 0
 
         g = c.createRadialGradient(x = node.x + node.hyped * random() / 100, y = node.y + node.hyped * random() / 100, 0, x, y, 60),
-        addColor(g, 0, node.color, 1),
-        addColor(g, node.hypeRMax / 80, node.color, .8),
-        addColor(g, node.hypeRMax / 60, node.color, .2);
+        addColor(node.color, node.hypeRMax / 80, g, 1),
+        addColor(node.color, node.hypeRMax / 60, g, .2);
         if (node.hypeR)
             node.hypeR++,
             nodes.some(function (e, f, g, h) {
@@ -89,11 +88,11 @@ setInterval(function (e, f, g, h) {
                     3 * random() < 1 - abs(e.color - node.color) / 256 &&
                     hype(node, e)
             }),
-            addColor(g, node.hypeR / 70, node.color, .15),
-            addColor(g, node.hypeR / 60, node.color, .2),
-            addColor(g, node.hypeR / 55, node.color, 0);
+            addColor(node.color, node.hypeR / 70, g, .15),
+            addColor(node.color, node.hypeR / 60, g, .2),
+            addColor(node.color, node.hypeR / 55, g, 0);
         else
-            addColor(g, node.hypeRMax / 20, node.color, 0);
+            addColor(node.color, node.hypeRMax / 20, g, 0);
         c.fillStyle = g;
         c.fillRect(node.x - 60, node.y - 60, 120, 120)
     });
