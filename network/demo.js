@@ -7,8 +7,8 @@ idle = 150,
 nodes = [],
 spectrum = [],
 
-getColor = function(e, f) {
-    return 'rgba(' + [255, 255 - e, e, f || 1] + ')';
+setColor = function (e, f) {
+    c.fillStyle = c.strokeStyle = 'rgba(' + [255, 255 - e, e, f || 1] + ')';
 },
 
 onclick = function (e, f) {
@@ -25,7 +25,7 @@ distance = function (e, f) {
 hype = function (e, f) {
     spectrum[f.color]--;
     // adopt color with slight mutation
-    f.color = -min(idle = 0, -min(255, e.color + 20 * random() - 10 | 0)),
+    f.color = -min(idle = 0, -min(e.color + 20 * random() - 10 | 0, 255)),
     spectrum[f.color]++;
     f.vx = (e.x - f.x) / 25;
     f.vy = (e.y - f.y) / 25;
@@ -39,8 +39,8 @@ for (y = 20; y--;)
     for (x = 30; x--;)
         nodes.push({
             color: 256 * random() | 0,
-            x: x * 25 + 40 + 20 * random() - 10,
-            y: y * 25 + 40 + 20 * random() - 10,
+            x: x * 25 + 30 + 20 * random(),
+            y: y * 25 + 30 + 20 * random(),
             vx: 0, vy: 0,
             hyped: 0,
             hypeR: 0,
@@ -55,7 +55,7 @@ nodes.some(function (node) {
     spectrum[node.color]++
 }),
 
-setInterval(function(e, f) {
+setInterval(function (e, f) {
     if (++idle == 200)
         hype(node = nodes[256 * random() | 0], node);
 
@@ -76,7 +76,7 @@ setInterval(function(e, f) {
         for (e = 2; e--;)
             c.beginPath(),
             c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.hypeRMax * (e * 2 + 1), 0, 7, 0),
-            c.fillStyle = getColor(node.color, e * .1),
+            setColor(node.color, e * .1),
             c.fill();
 
         if (node.hypeR) {
@@ -94,15 +94,15 @@ setInterval(function(e, f) {
 
             c.beginPath(),
             c.arc(node.x, node.y, node.hypeR, 0, 7, 0),
-            c.fillStyle = getColor(node.color, .15),
+            setColor(node.color, .15),
             c.fill(),
-            c.strokeStyle = getColor(node.color, .3),
+            setColor(node.color, .3),
             c.stroke()
         }
     });
 
     for (e = 256; e--;)
-        c.fillStyle = getColor(e),
+        setColor(e),
         c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 2, spectrum[e] * 2);
 
     c.font = '30px Trebuchet MS';
