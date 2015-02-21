@@ -51,12 +51,13 @@ for (e = 256; e--;)
     spectrum[e] = 0;
 
 nodes.some(function (node) {
+    node.o = {x: node.x, y: node.y};
     spectrum[node.color]++
 }),
 
 setInterval(function(e, f) {
     if (++idle == 200)
-       hype(node = nodes[256 * random() | 0], node);
+        hype(node = nodes[256 * random() | 0], node);
 
     c.fillRect(0, 0, a.width = a.width, a.height),
     c.scale(scale = min(a.width / cWidth, a.height / cHeight), scale),
@@ -67,6 +68,10 @@ setInterval(function(e, f) {
 
         node.x += node.vx *= .9;
         node.y += node.vy *= .9;
+
+        if (!node.hyped)
+            node.x += (node.o.x - node.x) / 500,
+            node.y += (node.o.y - node.y) / 500;
 
         for (e = 2; e--;)
             c.beginPath(),

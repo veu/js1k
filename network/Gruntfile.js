@@ -11,7 +11,7 @@ module.exports = function(grunt) {
       }
     },
     mangle: {
-      reserved: 'acefxyE',
+      reserved: 'acefoxyE',
       names: [
         'color',
         'cHeight',
