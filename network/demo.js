@@ -7,22 +7,22 @@ idle = 150,
 nodes = [],
 spectrum = [],
 
-getColor = function (e, f) {
-    return 'rgba(' + [255, 255 - e, e, f] + ')';
+addColor = function (e, f, g, h) {
+    e.addColorStop(f, 'rgba(' + [255, 255 - g, g, h] + ')')
 },
 
-onclick = function (e, f) {
+onclick = function (e, f, g, h) {
     nodes.some(function (node) {
         return distance(node, {x: e.pageX / scale - offset, y: e.pageY / scale}) <= node.hypeRMax
             && hype(node, node) | 1
     })
 },
 
-distance = function (e, f) {
+distance = function (e, f, g, h) {
     return sqrt((x = e.x - f.x) * x + (y = e.y - f.y) * y, 2)
 },
 
-hype = function (e, f) {
+hype = function (e, f, g, h) {
     spectrum[f.color]--;
     // adopt color with slight mutation
     f.color = -min(idle = 0, -min(e.color + 20 * random() - 10 | 0, 255)),
@@ -55,7 +55,7 @@ nodes.some(function (node) {
     spectrum[node.color]++
 }),
 
-setInterval(function (e, f) {
+setInterval(function (e, f, g, h) {
     if (++idle == 200)
         hype(node = nodes[256 * random() | 0], node);
 
@@ -73,38 +73,33 @@ setInterval(function (e, f) {
             node.x += (node.o.x - node.x) / 500,
             node.y += (node.o.y - node.y) / 500;
 
-        if (node.hypeR) {
-            node.hypeR++;
-            nodes.some(function (e, f) {
+        // stop hype if it reached its maximum size
+        if (node.hypeR > node.hypeRMax * 10)
+            node.hypeR = 0
+
+        g = c.createRadialGradient(x = node.x + node.hyped * random() / 100, y = node.y + node.hyped * random() / 100, 0, x, y, 60),
+        addColor(g, 0, node.color, 1),
+        addColor(g, node.hypeRMax / 80, node.color, .8),
+        addColor(g, node.hypeRMax / 60, node.color, .2);
+        if (node.hypeR)
+            node.hypeR++,
+            nodes.some(function (e, f, g, h) {
                 e.hyped ||
                     abs(distance(node, e) - node.hypeR) < 2 &&
                     3 * random() < 1 - abs(e.color - node.color) / 256 &&
                     hype(node, e)
-            });
-
-            // stop hype if it reached its maximum size
-            if (node.hypeR > node.hypeRMax * 10)
-                node.hypeR = 0
-        }
-
-        g = c.createRadialGradient(x = node.x + node.hyped * random() / 100, y = node.y + node.hyped * random() / 100, 0, x, y, 60);
-        g.addColorStop(0, getColor(node.color, 1));
-        g.addColorStop(node.hypeRMax / 80, getColor(node.color, 0.8));
-        g.addColorStop(node.hypeRMax / 60, getColor(node.color, 0.2));
-        if (node.hypeR)
-            g.addColorStop(node.hypeR / 70, getColor(node.color, 0.15)),
-            g.addColorStop(node.hypeR / 60, getColor(node.color, 0.2)),
-            g.addColorStop(node.hypeR / 60 + 0.05, getColor(node.color, 0));
+            }),
+            addColor(g, node.hypeR / 70, node.color, .15),
+            addColor(g, node.hypeR / 60, node.color, .2),
+            addColor(g, node.hypeR / 55, node.color, 0);
         else
-            g.addColorStop(node.hypeRMax / 20, getColor(node.color, 0));
-        c.beginPath(),
-        c.arc(node.x, node.y, 60, 0, 7, 0),
+            addColor(g, node.hypeRMax / 20, node.color, 0);
         c.fillStyle = g;
-        c.fill()
+        c.fillRect(node.x - 60, node.y - 60, 120, 120)
     });
 
     for (e = 256; e--;)
-        c.fillStyle = getColor(e, 1),
+        c.fillStyle = 'rgba(' + [255, 255 - e, e, 1] + ')',
         c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 2, spectrum[e] * 2);
 
     c.font = '30px Trebuchet MS';
