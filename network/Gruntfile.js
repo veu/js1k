@@ -19,7 +19,6 @@ module.exports = function(grunt) {
         'cHeight',
         'cScale',
         'cWidth',
-        'distance',
         'hype',
         'hyped',
         'hypeR',

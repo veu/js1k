@@ -13,13 +13,9 @@ addColor = function (e, f, g, h) {
 
 onclick = function (e, f, g, h) {
     nodes.some(function (node) {
-        return distance(node, {x: e.pageX / cScale - offset, y: e.pageY / cScale}) <= node.hypeRMax
+        return (x = e.pageX / cScale - offset - node.x) * x + (y = e.pageY / cScale - node.y) * y <= node.hypeRMax * node.hypeRMax
             && hype(node, node) | 1
     })
-},
-
-distance = function (e, f, g, h) {
-    return sqrt((x = e.x - f.x) * x + (y = e.y - f.y) * y, 2)
 },
 
 hype = function (e, f, g, h) {
@@ -84,7 +80,7 @@ setInterval(function (e, f, g, h) {
             node.hypeR++,
             nodes.some(function (e, f, g, h) {
                 e.hyped ||
-                    abs(distance(node, e) - node.hypeR) < 2 &&
+                    abs(sqrt((x = node.x - e.x) * x + (y = node.y - e.y) * y, 2) - node.hypeR) < 2 &&
                     3 * random() < 1 - abs(e.color - node.color) / 256 &&
                     hype(node, e)
             }),
