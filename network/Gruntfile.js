@@ -3,7 +3,8 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
       options: {
-        mangle: false
+        mangle: false,
+        compress: false,
       },
       build: {
         src: 'demo.js',
@@ -11,8 +12,9 @@ module.exports = function(grunt) {
       }
     },
     mangle: {
-      reserved: 'acefgoxyE',
+      reserved: 'acefghoxyE',
       names: [
+        'addColor',
         'color',
         'cHeight',
         'cWidth',
@@ -25,7 +27,6 @@ module.exports = function(grunt) {
         'node',
         'nodes',
         'offset',
-        'setColor',
         'spectrum',
         'vx',
         'vy',
