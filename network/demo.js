@@ -8,18 +8,14 @@ nodes = [],
 spectrum = [],
 
 setColor = function (e, f) {
-    c.fillStyle = c.strokeStyle = 'rgba(' + [255, 255 - e, e, f || 1] + ')';
+    c.fillStyle = c.strokeStyle = 'rgba(' + [255, 255 - e, e, f] + ')';
 },
 
 onclick = function (e, f) {
     nodes.some(function (node) {
-        return distance(node, {x: e.pageX / scale - offset, y: e.pageY / scale}) <= node.hypeRMax
+        return (x = e.pageX / cScale - offset - node.x) * x + (y = e.pageY / cScale - node.y) * y <= node.hypeRMax * node.hypeRMax
             && hype(node, node) | 1
     })
-},
-
-distance = function (e, f) {
-    return sqrt((x = e.x - f.x) * x + (y = e.y - f.y) * y, 2)
 },
 
 hype = function (e, f) {
@@ -60,8 +56,8 @@ setInterval(function (e, f) {
         hype(node = nodes[256 * random() | 0], node);
 
     c.fillRect(0, 0, a.width = a.width, a.height),
-    c.scale(scale = min(a.width / cWidth, a.height / cHeight), scale),
-    c.translate(offset = (a.width / scale - cWidth) / 2, 0),
+    c.scale(cScale = min(a.width / cWidth, a.height / cHeight), cScale),
+    c.translate(offset = (a.width / cScale - cWidth) / 2, 0),
 
     nodes.some(function (node) {
         if (node.hyped) node.hyped--;
@@ -73,17 +69,20 @@ setInterval(function (e, f) {
             node.x += (node.o.x - node.x) / 500,
             node.y += (node.o.y - node.y) / 500;
 
-        for (e = 2; e--;)
             c.beginPath(),
-            c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.hypeRMax * (e * 2 + 1), 0, 7, 0),
-            setColor(node.color, e * .1),
+            c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.hypeRMax * 3, 0, 7, 0),
+            setColor(node.color, .1),
+            c.fill();
+            c.beginPath(),
+            c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.hypeRMax, 0, 7, 0),
+            setColor(node.color, 1),
             c.fill();
 
         if (node.hypeR) {
             node.hypeR++;
             nodes.some(function (e, f) {
                 e.hyped ||
-                    abs(distance(node, e) - node.hypeR) < 2 &&
+                    abs(sqrt((x = e.x - node.x) * x + (y = e.y - node.y) * y, 2) - node.hypeR) < 2 &&
                     3 * random() < 1 - abs(e.color - node.color) / 256 &&
                     hype(node, e)
             });
@@ -102,7 +101,7 @@ setInterval(function (e, f) {
     });
 
     for (e = 256; e--;)
-        setColor(e),
+        setColor(e, 1),
         c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 2, spectrum[e] * 2);
 
     c.font = '30px Trebuchet MS';

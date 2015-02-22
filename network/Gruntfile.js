@@ -3,7 +3,8 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
       options: {
-        mangle: false
+        mangle: false,
+        compress: false
       },
       build: {
         src: 'demo.js',
@@ -15,8 +16,8 @@ module.exports = function(grunt) {
       names: [
         'color',
         'cHeight',
+        'cScale',
         'cWidth',
-        'distance',
         'hype',
         'hyped',
         'hypeR',
