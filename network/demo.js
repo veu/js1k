@@ -5,7 +5,7 @@ nodes = [],
 spectrum = [],
 
 setColor = function (e, f) {
-    c.fillStyle = c.strokeStyle = 'rgba(' + [255, 255 - e, e, 1 / f] + ')';
+    c.fillStyle = c.strokeStyle = 'rgba(' + [255, 255 - e, e, 1 / f] + ')'
 },
 
 onclick = function (e, f) {
@@ -48,7 +48,7 @@ nodes.some(function (node) {
 }),
 
 setInterval(function (e, f) {
-    ++idle == 200 &&
+    ++idle - 200 ||
         startHype(node = nodes[256 * random() | 0], node);
 
     c.fillRect(0, 0, a.width = a.width, a.height),
@@ -57,9 +57,9 @@ setInterval(function (e, f) {
 
     c.fillStyle = '#fff',
     showInstructions &&
-        c.fillText('Click a circle to start a hype', 331, 590);
+        c.fillText('Click a circle to hype it', 345, 590);
     c.font = '30px Trebuchet MS',
-    c.fillText('Evolution of Hype', 283, 570)
+    c.fillText('Evolution of Hype', 283, 570);
 
     for (e = 256; e--;)
         setColor(e, 1),
@@ -74,7 +74,7 @@ setInterval(function (e, f) {
         node.x += node.vx *= .9;
         node.y += node.vy *= .9;
 
-        !node.hyped && (
+        node.hyped || (
             node.x += (node.o.x - node.x) / 500,
             node.y += (node.o.y - node.y) / 500
         )
