@@ -54,7 +54,16 @@ setInterval(function (e, f) {
 
     c.fillRect(0, 0, a.width = a.width, a.height),
     c.scale(cScale = min(a.width / 804, a.height / 640), cScale),
-    c.translate(offset = (a.width / cScale - 804) / 2, 0),
+    c.translate(offset = (a.width / cScale - 804) / 2, 0);
+
+    for (e = 256; e--;)
+        setColor(e, 1),
+        c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 1, spectrum[e] * 2);
+
+    c.font = '30px Trebuchet MS';
+    c.fillStyle = '#fff';
+    c.fillRect(137, 610, 530, 1),
+    c.fillText('Evolution of Hype', 283, 570)
 
     nodes.some(function (node) {
         if (node.hyped) node.hyped--;
@@ -65,15 +74,6 @@ setInterval(function (e, f) {
         if (!node.hyped)
             node.x += (node.o.x - node.x) / 500,
             node.y += (node.o.y - node.y) / 500;
-
-        c.beginPath(),
-        c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.hypeRMax * 3, 0, 7, 0),
-        setColor(node.color, .1),
-        c.fill();
-        c.beginPath(),
-        c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.hypeRMax, 0, 7, 0),
-        setColor(node.color, 1),
-        c.fill();
 
         if (node.hypeR) {
             node.hypeR++;
@@ -97,12 +97,12 @@ setInterval(function (e, f) {
         }
     });
 
-    for (e = 256; e--;)
-        setColor(e, 1),
-        c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 2, spectrum[e] * 2);
-
-    c.font = '30px Trebuchet MS';
-    c.fillStyle = '#fff';
-    c.fillRect(137, 610, 530, 1),
-    c.fillText('Evolution of Hype', 283, 570)
+    nodes.some(function (node) {
+        c.beginPath(),
+        c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.hypeRMax, 0, 7, 0),
+        setColor(node.color, 1),
+        c.shadowColor = c.fillStyle;
+        c.shadowBlur = node.hypeRMax * 3;
+        c.fill()
+    })
 }, 33)
