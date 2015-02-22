@@ -84,9 +84,8 @@ setInterval(function (e, f, g, h) {
                     3 * random() < 1 - abs(e.color - node.color) / 256 &&
                     hype(node, e)
             }),
-            addColor(node.color, node.hypeR / 70, g, .15),
-            addColor(node.color, node.hypeR / 60, g, .2),
-            addColor(node.color, node.hypeR / 55, g, 0);
+            addColor(node.color, node.hypeR / 70, g, .1),
+            addColor(node.color, node.hypeR / 60, g, 0);
         else
             addColor(node.color, node.hypeRMax / 20, g, 0);
         c.fillStyle = g;
