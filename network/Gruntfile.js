@@ -15,9 +15,7 @@ module.exports = function(grunt) {
       reserved: 'acefoxyE',
       names: [
         'color',
-        'cHeight',
         'cScale',
-        'cWidth',
         'hype',
         'hyped',
         'hypeR',

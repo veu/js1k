@@ -1,6 +1,3 @@
-// size of used area
-cWidth = 804,
-cHeight = 640,
 // ticks since last hype
 idle = 150,
 
@@ -56,8 +53,8 @@ setInterval(function (e, f) {
         hype(node = nodes[256 * random() | 0], node);
 
     c.fillRect(0, 0, a.width = a.width, a.height),
-    c.scale(cScale = min(a.width / cWidth, a.height / cHeight), cScale),
-    c.translate(offset = (a.width / cScale - cWidth) / 2, 0),
+    c.scale(cScale = min(a.width / 804, a.height / 640), cScale),
+    c.translate(offset = (a.width / cScale - 804) / 2, 0),
 
     nodes.some(function (node) {
         if (node.hyped) node.hyped--;
@@ -69,14 +66,14 @@ setInterval(function (e, f) {
             node.x += (node.o.x - node.x) / 500,
             node.y += (node.o.y - node.y) / 500;
 
-            c.beginPath(),
-            c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.hypeRMax * 3, 0, 7, 0),
-            setColor(node.color, .1),
-            c.fill();
-            c.beginPath(),
-            c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.hypeRMax, 0, 7, 0),
-            setColor(node.color, 1),
-            c.fill();
+        c.beginPath(),
+        c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.hypeRMax * 3, 0, 7, 0),
+        setColor(node.color, .1),
+        c.fill();
+        c.beginPath(),
+        c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.hypeRMax, 0, 7, 0),
+        setColor(node.color, 1),
+        c.fill();
 
         if (node.hypeR) {
             node.hypeR++;
