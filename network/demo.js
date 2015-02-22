@@ -18,12 +18,12 @@ onclick = function (e, f) {
 startHype = function (e, f) {
     spectrum[f.color]--;
     // adopt color with slight mutation
-    f.color = -min(idle = 0, -min(e.color + 20 * random() - 10 | 0, 255)),
+    f.color = e.color + (f.color - e.color) / 10 * random() | 0;
     spectrum[f.color]++;
     f.vx = (e.x - f.x) / 25;
     f.vy = (e.y - f.y) / 25;
     f.hyped = 200;
-    f.hypeR = 1
+    idle = f.hypeR = 1
 }
 
 /// setup grid
