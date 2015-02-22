@@ -16,7 +16,6 @@ module.exports = function(grunt) {
       names: [
         'color',
         'cScale',
-        'hype',
         'hyped',
         'hypeR',
         'hypeRMax',
@@ -25,7 +24,9 @@ module.exports = function(grunt) {
         'nodes',
         'offset',
         'setColor',
+        'showInstructions',
         'spectrum',
+        'startHype',
         'vx',
         'vy',
       ]

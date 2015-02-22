@@ -1,5 +1,5 @@
 // ticks since last hype
-idle = 150,
+idle = showInstructions = 150,
 
 nodes = [],
 spectrum = [],
@@ -9,20 +9,19 @@ setColor = function (e, f) {
 },
 
 onclick = function (e, f) {
-    nodes.some(function (node) {
-        return (x = e.pageX / cScale - offset - node.x) * x + (y = e.pageY / cScale - node.y) * y <= node.hypeRMax * node.hypeRMax
-            && hype(node, node) | 1
+    showInstructions = nodes.some(function (node) {
+        (x = e.pageX / cScale - offset - node.x) * x + (y = e.pageY / cScale - node.y) * y > node.hypeRMax * node.hypeRMax
+            || startHype(node, node)
     })
 },
 
-hype = function (e, f) {
+startHype = function (e, f) {
     spectrum[f.color]--;
     // adopt color with slight mutation
     f.color = -min(idle = 0, -min(e.color + 20 * random() - 10 | 0, 255)),
     spectrum[f.color]++;
     f.vx = (e.x - f.x) / 25;
     f.vy = (e.y - f.y) / 25;
-    // set how long the node will be hyped
     f.hyped = 200;
     f.hypeR = 1
 }
@@ -50,7 +49,7 @@ nodes.some(function (node) {
 
 setInterval(function (e, f) {
     if (++idle == 200)
-        hype(node = nodes[256 * random() | 0], node);
+        startHype(node = nodes[256 * random() | 0], node);
 
     c.fillRect(0, 0, a.width = a.width, a.height),
     c.scale(cScale = min(a.width / 804, a.height / 640), cScale),
@@ -60,10 +59,12 @@ setInterval(function (e, f) {
         setColor(e, 1),
         c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 1, spectrum[e] * 2);
 
-    c.font = '30px Trebuchet MS';
     c.fillStyle = '#fff';
-    c.fillRect(137, 610, 530, 1),
+    if (showInstructions)
+        c.fillText('Click a circle to start a hype', 331, 590);
+    c.font = '30px Trebuchet MS',
     c.fillText('Evolution of Hype', 283, 570)
+    c.fillRect(137, 610, 530, 1),
 
     nodes.some(function (node) {
         if (node.hyped) node.hyped--;
@@ -81,10 +82,9 @@ setInterval(function (e, f) {
                 e.hyped ||
                     abs(sqrt((x = e.x - node.x) * x + (y = e.y - node.y) * y, 2) - node.hypeR) < 2 &&
                     3 * random() < 1 - abs(e.color - node.color) / 256 &&
-                    hype(node, e)
+                    startHype(node, e)
             });
 
-            // stop hype if it reached its maximum size
             if (node.hypeR > node.hypeRMax * 10)
                 node.hypeR = 0
 
