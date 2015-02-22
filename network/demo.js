@@ -55,15 +55,17 @@ setInterval(function (e, f) {
     c.scale(cScale = min(a.width / 804, a.height / 640), cScale),
     c.translate(offset = (a.width / cScale - 804) / 2, 0);
 
-    for (e = 256; e--;)
-        setColor(e, 1),
-        c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 1, spectrum[e] * 2);
-
-    c.fillStyle = '#fff';
+    c.fillStyle = '#fff',
     showInstructions &&
         c.fillText('Click a circle to start a hype', 331, 590);
     c.font = '30px Trebuchet MS',
     c.fillText('Evolution of Hype', 283, 570)
+
+    for (e = 256; e--;)
+        setColor(e, 1),
+        c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 2, spectrum[e] * 2);
+
+    c.fillStyle = '#fff',
     c.fillRect(137, 610, 530, 1),
 
     nodes.some(function (node) {
