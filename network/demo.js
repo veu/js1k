@@ -5,7 +5,7 @@ nodes = [],
 spectrum = [],
 
 setColor = function (e, f) {
-    c.fillStyle = c.strokeStyle = 'rgba(' + [255, 255 - e, e, f] + ')';
+    c.fillStyle = c.strokeStyle = 'rgba(' + [255, 255 - e, e, 1 / f] + ')';
 },
 
 onclick = function (e, f) {
@@ -48,7 +48,7 @@ nodes.some(function (node) {
 }),
 
 setInterval(function (e, f) {
-    if (++idle == 200)
+    ++idle == 200 &&
         startHype(node = nodes[256 * random() | 0], node);
 
     c.fillRect(0, 0, a.width = a.width, a.height),
@@ -60,41 +60,41 @@ setInterval(function (e, f) {
         c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 1, spectrum[e] * 2);
 
     c.fillStyle = '#fff';
-    if (showInstructions)
+    showInstructions &&
         c.fillText('Click a circle to start a hype', 331, 590);
     c.font = '30px Trebuchet MS',
     c.fillText('Evolution of Hype', 283, 570)
     c.fillRect(137, 610, 530, 1),
 
     nodes.some(function (node) {
-        if (node.hyped) node.hyped--;
+        node.hyped && node.hyped--;
 
         node.x += node.vx *= .9;
         node.y += node.vy *= .9;
 
-        if (!node.hyped)
+        !node.hyped && (
             node.x += (node.o.x - node.x) / 500,
-            node.y += (node.o.y - node.y) / 500;
+            node.y += (node.o.y - node.y) / 500
+        )
 
-        if (node.hypeR) {
-            node.hypeR++;
+        node.hypeR && (
             nodes.some(function (e, f) {
                 e.hyped ||
                     abs(sqrt((x = e.x - node.x) * x + (y = e.y - node.y) * y, 2) - node.hypeR) < 2 &&
                     3 * random() < 1 - abs(e.color - node.color) / 256 &&
                     startHype(node, e)
-            });
-
-            if (node.hypeR > node.hypeRMax * 10)
-                node.hypeR = 0
+            }),
 
             c.beginPath(),
             c.arc(node.x, node.y, node.hypeR, 0, 7, 0),
-            setColor(node.color, .15),
+            setColor(node.color, 7),
             c.fill(),
-            setColor(node.color, .3),
-            c.stroke()
-        }
+            setColor(node.color, 3),
+            c.stroke(),
+
+            ++node.hypeR > node.hypeRMax * 10
+                && (node.hypeR = 0)
+        )
     });
 
     nodes.some(function (node) {
