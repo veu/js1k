@@ -17,18 +17,18 @@ module.exports = function(grunt) {
         'color',
         'cScale',
         'hyped',
-        'hypeR',
-        'hypeRMax',
         'idle',
         'node',
         'nodes',
         'offset',
+        'radius',
         'setColor',
         'showInstructions',
         'spectrum',
         'startHype',
         'vx',
         'vy',
+        'wave'
       ]
     },
     regpack: {
