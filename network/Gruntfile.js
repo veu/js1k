@@ -12,7 +12,7 @@ module.exports = function(grunt) {
       }
     },
     mangle: {
-      reserved: 'acefoxyE',
+      reserved: 'acefxyE',
       names: [
         'color',
         'cScale',

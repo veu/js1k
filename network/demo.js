@@ -51,7 +51,7 @@ for (y = 20; y--;)
 
 // remember original node positions
 nodes.some(function (node) {
-    node.o = {x: node.x, y: node.y}
+    node.node = {x: node.x, y: node.y}
 }),
 
 setInterval(function (e, f) {
@@ -90,8 +90,8 @@ setInterval(function (e, f) {
 
         // update hype or move node back to origin
         node.hyped ? node.hyped-- : (
-            node.x += (node.o.x - node.x) / 500,
-            node.y += (node.o.y - node.y) / 500
+            node.x += (node.node.x - node.x) / 500,
+            node.y += (node.node.y - node.y) / 500
         ),
 
         // analize colors
