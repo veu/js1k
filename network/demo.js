@@ -18,12 +18,12 @@ onclick = function (e, f) {
 
 startHype = function (e, f) {
     // adopt color with slight mutation towards hyper
-    f.color = e.color + (f.color - e.color) / 10 * random() | 0;
+    f.color = e.color + (f.color - e.color) / 10 * random() | 0,
     // move hypee closer to hyper
     f.vx = (e.x - f.x) / 25;
     f.vy = (e.y - f.y) / 25;
     // set hype length
-    f.hyped = 200;
+    f.hyped = 200,
     // reset idle cooldown
     idle =
     // start hype wave 
@@ -66,23 +66,24 @@ setInterval(function (e, f) {
     // center demo
     c.translate(offset = (a.width / cScale - 804) / 2, 0);
 
-    // draw text
+    // draw instruction
     c.fillStyle = '#fff',
     showInstructions &&
         c.fillText('Click a circle to hype it', 345, 590);
+
+    // reset color spectrum
+    spectrum = [],
+
+    // draw title
     c.font = '30px Trebuchet MS',
     c.fillText('Evolution of Hype', 283, 570);
 
     // init color spectrum
-    spectrum = [];
     for (e = 256; e--;)
         spectrum[e] = 0;
 
     // update nodes and waves, draw waves
     nodes.some(function (node) {
-        // analize colors
-        spectrum[node.color]++;
-
         // move node
         node.x += node.vx *= .9;
         node.y += node.vy *= .9;
@@ -91,7 +92,10 @@ setInterval(function (e, f) {
         node.hyped ? node.hyped-- : (
             node.x += (node.o.x - node.x) / 500,
             node.y += (node.o.y - node.y) / 500
-        )
+        ),
+
+        // analize colors
+        e = node.color, spectrum[e]++,
 
         // update hype wave
         node.wave && (
