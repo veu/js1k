@@ -22,7 +22,6 @@ module.exports = function(grunt) {
         'nodes',
         'offset',
         'radius',
-        'setColor',
         'showInstructions',
         'spectrum',
         'startHype',

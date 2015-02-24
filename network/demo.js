@@ -6,11 +6,6 @@ idle = 150,
 // node information (position, color, hype, ...)
 nodes = [],
 
-// set current drawing color
-setColor = function (e, f) {
-    c.fillStyle = c.strokeStyle = 'rgba(' + [255, 255 - e, e, 1 / f] + ')'
-},
-
 onclick = function (e, f) {
     // hide instructions
     showInstructions =
@@ -111,9 +106,9 @@ setInterval(function (e, f) {
             // draw hype wave
             c.beginPath(),
             c.arc(node.x, node.y, node.wave, 0, 7, 0),
-            setColor(node.color, 7),
+            e = node.color, c.fillStyle = c.strokeStyle = 'rgba(' + [255, 255 - e, e, 1 / 7] + ')',
             c.fill(),
-            setColor(node.color, 3),
+            e = node.color, c.fillStyle = c.strokeStyle = 'rgba(' + [255, 255 - e, e, 1 / 3] + ')',
             c.stroke(),
 
             // stop wave
@@ -124,7 +119,7 @@ setInterval(function (e, f) {
 
     // draw spectrum
     for (e = 256; e--;)
-        setColor(e, 1),
+        c.fillStyle = c.strokeStyle = 'rgba(' + [255, 255 - e, e, 1] + ')',
         c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 2, spectrum[e] * 2);
 
     // draw line
@@ -135,8 +130,7 @@ setInterval(function (e, f) {
     nodes.some(function (node) {
         c.beginPath(),
         c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.radius, 0, 7, 0),
-        setColor(node.color, 1),
-        c.shadowColor = c.fillStyle;
+        e = node.color, c.shadowColor = c.fillStyle = c.strokeStyle = 'rgba(' + [255, 255 - e, e, 1] + ')',
         c.shadowBlur = node.radius * 3;
         c.fill()
     })
