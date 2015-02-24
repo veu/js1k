@@ -89,7 +89,7 @@ module.exports = function(grunt) {
     var fs = require('fs'),
         demo = fs.readFileSync('build/demo.zip.js'),
         shim = fs.readFileSync('shim.html', {encoding: 'utf8'});
-    shim = shim.replace('%DEMO%', demo);
+    shim = shim.split('%DEMO%').join(demo);
     fs.writeFileSync('build/shim.html', shim);
   });
 
