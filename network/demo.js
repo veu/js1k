@@ -5,8 +5,6 @@ idle = 150,
 
 // node information (position, color, hype, ...)
 nodes = [],
-// number of nodes with each color
-spectrum = [],
 
 // set current drawing color
 setColor = function (e, f) {
@@ -24,12 +22,8 @@ onclick = function (e, f) {
 },
 
 startHype = function (e, f) {
-    // decrement old color count
-    spectrum[f.color]--;
     // adopt color with slight mutation towards hyper
     f.color = e.color + (f.color - e.color) / 10 * random() | 0;
-    // increment new color count
-    spectrum[f.color]++;
     // move hypee closer to hyper
     f.vx = (e.x - f.x) / 25;
     f.vy = (e.y - f.y) / 25;
@@ -60,15 +54,9 @@ for (y = 20; y--;)
             radius: 5 * random() + 1 | 0
         });
 
-// init color spectrum
-for (e = 256; e--;)
-    spectrum[e] = 0;
-
+// remember original node positions
 nodes.some(function (node) {
-    // remember original node position
-    node.o = {x: node.x, y: node.y};
-    // analize colors
-    spectrum[node.color]++
+    node.o = {x: node.x, y: node.y}
 }),
 
 setInterval(function (e, f) {
@@ -90,26 +78,22 @@ setInterval(function (e, f) {
     c.font = '30px Trebuchet MS',
     c.fillText('Evolution of Hype', 283, 570);
 
-    // draw spectrum
+    // init color spectrum
+    spectrum = [];
     for (e = 256; e--;)
-        setColor(e, 1),
-        c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 2, spectrum[e] * 2);
-
-    // draw line
-    c.fillStyle = '#fff',
-    c.fillRect(137, 610, 530, 1),
+        spectrum[e] = 0;
 
     // update nodes and waves, draw waves
     nodes.some(function (node) {
-        // update hype
-        node.hyped && node.hyped--;
+        // analize colors
+        spectrum[node.color]++;
 
         // move node
         node.x += node.vx *= .9;
         node.y += node.vy *= .9;
 
-        // move node back to origin
-        node.hyped || (
+        // update hype or move node back to origin
+        node.hyped ? node.hyped-- : (
             node.x += (node.o.x - node.x) / 500,
             node.y += (node.o.y - node.y) / 500
         )
@@ -137,6 +121,15 @@ setInterval(function (e, f) {
                 && (node.wave = 0)
         )
     });
+
+    // draw spectrum
+    for (e = 256; e--;)
+        setColor(e, 1),
+        c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 2, spectrum[e] * 2);
+
+    // draw line
+    c.fillStyle = '#fff',
+    c.fillRect(137, 610, 530, 1),
 
     // draw nodes
     nodes.some(function (node) {
