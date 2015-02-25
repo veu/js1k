@@ -17,8 +17,8 @@ onclick = function (e, f) {
 },
 
 startHype = function (e, f) {
-    // adopt color with slight mutation towards hyper
-    f.color = e.color + (f.color - e.color) / 10 * random() | 0,
+    // adopt color with slight mutation
+    f.color = e.color + (f.color - e.color) / 10 * random() + 10 * random() - 5 | 0,
     // move hypee closer to hyper
     f.vx = (e.x - f.x) / 25;
     f.vy = (e.y - f.y) / 25;
