@@ -31,23 +31,22 @@ startHype = function (e, f) {
 };
 
 // setup grid
-for (y = 20; y--;)
-    for (x = 30; x--;)
-        nodes.push({
-            // node color
-            color: 256 * random() | 0,
-            // position
-            x: x * 25 + 30 + 20 * random(),
-            y: y * 25 + 30 + 20 * random(),
-            // speed
-            vx: 0, vy: 0,
-            // hype (shaking animation)
-            hyped: 0,
-            // hype wave radius
-            wave: time = 0,
-            // node radius
-            radius: 5 * random() + 1 | 0
-        });
+e = 600; while (e--)
+    nodes.push({
+        // node color
+        color: 256 * random() | 0,
+        // position
+        x: e % 30 * 25 + 30 + 20 * random(),
+        y: (e / 30 | 0) * 25 + 30 + 20 * random(),
+        // speed
+        vx: 0, vy: 0,
+        // hype (shaking animation)
+        hyped: 0,
+        // hype wave radius
+        wave: time = 0,
+        // node radius
+        radius: 5 * random() + 1 | 0
+    });
 
 // remember original node positions
 nodes.some(function (node) {
@@ -84,7 +83,7 @@ nodes.some(function (node) {
         c.fillText('Evolution of Hype', 283, 570);
 
         // init color spectrum
-        for (e = 256; e--;)
+        e = 256; while(e--)
             spectrum[e] = 0;
 
         // update nodes and waves, draw waves
@@ -115,9 +114,9 @@ nodes.some(function (node) {
                 // draw hype wave
                 c.beginPath(),
                 c.arc(node.x, node.y, node.wave, 0, 7, 0),
-                e = node.color, c.fillStyle = c.strokeStyle = 'rgba(' + [255, 255 - e, e, 1 / 7] + ')',
+                e = node.color, c.fillStyle = 'rgba(' + [255, 255 - e, e, 1 / 7] + ')',
                 c.fill(),
-                e = node.color, c.fillStyle = c.strokeStyle = 'rgba(' + [255, 255 - e, e, 1 / 3] + ')',
+                e = node.color, c.strokeStyle = 'rgba(' + [255, 255 - e, e, 1 / 3] + ')',
                 c.stroke(),
 
                 // stop wave
@@ -127,8 +126,8 @@ nodes.some(function (node) {
         });
 
         // draw spectrum
-        for (e = 256; e--;)
-            c.fillStyle = c.strokeStyle = 'rgba(' + [255, 255 - e, e, 1] + ')',
+        e = 256; while (e--)
+            c.fillStyle = 'rgba(' + [255, 255 - e, e, 1] + ')',
             c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 2, spectrum[e] * 2);
 
         // draw line
@@ -139,7 +138,7 @@ nodes.some(function (node) {
         nodes.some(function (node) {
             c.beginPath(),
             c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.radius, 0, 7, 0),
-            e = node.color, c.shadowColor = c.fillStyle = c.strokeStyle = 'rgba(' + [255, 255 - e, e, 1] + ')',
+            e = node.color, c.shadowColor = c.fillStyle = 'rgba(' + [255, 255 - e, e, 1] + ')',
             c.shadowBlur = node.radius * 3;
             c.fill()
         })
