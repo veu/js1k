@@ -20,18 +20,18 @@ startHype = function (e, f) {
     // adopt color with slight mutation
     f.color = e.color + (f.color - e.color) / 10 * random() + 10 * random() - 5 | 0,
     // move hypee closer to hyper
-    f.vx = (e.x - f.x) / 25;
-    f.vy = (e.y - f.y) / 25;
+    f.vx = (e.x - f.x) / 25,
+    f.vy = (e.y - f.y) / 25,
     // set hype length
     f.hyped = 200,
     // reset idle cooldown
     idle =
     // start hype wave
     f.wave = 1
-};
+},
 
 // setup grid
-e = 600; while (e--)
+e = 600; while (e--) {
     nodes.push({
         // node color
         color: 256 * random() | 0,
@@ -46,7 +46,8 @@ e = 600; while (e--)
         wave: time = 0,
         // node radius
         radius: 5 * random() + 1 | 0
-    });
+    })
+}
 
 // remember original node positions
 nodes.some(function (node) {
@@ -54,43 +55,44 @@ nodes.some(function (node) {
 }),
 
 (draw = function (e, f) {
-    requestAnimationFrame(draw);
+    requestAnimationFrame(draw),
 
     e - time > 30 && (function (e, f) {
         time = e,
 
         // start new hype after a cooldown
         ++idle - 200 ||
-            startHype(node = nodes[256 * random() | 0], node);
+            startHype(node = nodes[256 * random() | 0], node),
 
         // reset context state and draw background
         c.fillRect(0, 0, a.width = a.width, a.height),
         // scale canvas to demo size
         c.scale(cScale = min(a.width / 804, a.height / 640), cScale),
         // center demo
-        c.translate(offset = (a.width / cScale - 804) / 2, 0);
+        c.translate(offset = (a.width / cScale - 804) / 2, 0),
 
         // draw instruction
         c.fillStyle = '#fff',
         showInstructions &&
-            c.fillText('Click a circle to hype it', 345, 590);
+            c.fillText('Click a circle to hype it', 345, 590),
 
         // reset color spectrum
         spectrum = [],
 
         // draw title
         c.font = '30px Trebuchet MS',
-        c.fillText('Evolution of Hype', 283, 570);
+        c.fillText('Evolution of Hype', 283, 570),
 
         // init color spectrum
-        e = 256; while(e--)
-            spectrum[e] = 0;
+        e = 256; while(e--) {
+            spectrum[e] = 0
+        }
 
         // update nodes and waves, draw waves
         nodes.some(function (node) {
             // move node
-            node.x += node.vx *= .9;
-            node.y += node.vy *= .9;
+            node.x += node.vx *= .9,
+            node.y += node.vy *= .9,
 
             // update hype or move node back to origin
             node.hyped ? node.hyped-- : (
@@ -123,12 +125,13 @@ nodes.some(function (node) {
                 ++node.wave > node.radius * 10
                     && (node.wave = 0)
             )
-        });
+        }),
 
         // draw spectrum
-        e = 256; while (e--)
+        e = 256; while (e--) {
             c.fillStyle = 'rgba(' + [255, 255 - e, e, 1] + ')',
-            c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 2, spectrum[e] * 2);
+            c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 2, spectrum[e] * 2)
+        }
 
         // draw line
         c.fillStyle = '#fff',
@@ -139,7 +142,7 @@ nodes.some(function (node) {
             c.beginPath(),
             c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.radius, 0, 7, 0),
             e = node.color, c.shadowColor = c.fillStyle = 'rgba(' + [255, 255 - e, e, 1] + ')',
-            c.shadowBlur = node.radius * 3;
+            c.shadowBlur = node.radius * 3,
             c.fill()
         })
     })(e)
