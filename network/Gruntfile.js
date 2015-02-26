@@ -12,23 +12,24 @@ module.exports = function(grunt) {
       }
     },
     mangle: {
-      reserved: 'acefoxyE',
+      reserved: 'acefxyE',
       names: [
         'color',
         'cScale',
+        'draw',
         'hyped',
-        'hypeR',
-        'hypeRMax',
         'idle',
         'node',
         'nodes',
         'offset',
-        'setColor',
+        'radius',
         'showInstructions',
         'spectrum',
         'startHype',
+        'time',
         'vx',
         'vy',
+        'wave'
       ]
     },
     regpack: {
@@ -58,7 +59,7 @@ module.exports = function(grunt) {
       reserved = grunt.config('mangle.reserved'),
       charUsage = {},
       chars, data;
-    
+
     data = fs.readFileSync('build/demo.min.js', {encoding: 'utf8'});
     for (var i = 65; i < 91; i++) charUsage[String.fromCharCode(i)] = 0;
     for (var i = 97; i < 123; i++) charUsage[String.fromCharCode(i)] = 0;
@@ -90,7 +91,7 @@ module.exports = function(grunt) {
     var fs = require('fs'),
         demo = fs.readFileSync('build/demo.zip.js'),
         shim = fs.readFileSync('shim.html', {encoding: 'utf8'});
-    shim = shim.replace('%DEMO%', demo);
+    shim = shim.split('%DEMO%').join(demo);
     fs.writeFileSync('build/shim.html', shim);
   });
 
