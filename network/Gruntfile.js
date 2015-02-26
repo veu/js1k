@@ -16,6 +16,7 @@ module.exports = function(grunt) {
       names: [
         'color',
         'cScale',
+        'draw',
         'hyped',
         'idle',
         'node',
@@ -25,6 +26,7 @@ module.exports = function(grunt) {
         'showInstructions',
         'spectrum',
         'startHype',
+        'time',
         'vx',
         'vy',
         'wave'
@@ -57,7 +59,7 @@ module.exports = function(grunt) {
       reserved = grunt.config('mangle.reserved'),
       charUsage = {},
       chars, data;
-    
+
     data = fs.readFileSync('build/demo.min.js', {encoding: 'utf8'});
     for (var i = 65; i < 91; i++) charUsage[String.fromCharCode(i)] = 0;
     for (var i = 97; i < 123; i++) charUsage[String.fromCharCode(i)] = 0;
