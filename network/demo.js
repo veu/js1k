@@ -105,12 +105,13 @@ nodes.some(function (node) {
 
             // update hype wave
             node.wave && (
+                e = node,
                 // hype touched nodes
-                nodes.some(function (e, f) {
-                    e.hyped ||
-                        abs(sqrt((x = e.x - node.x) * x + (y = e.y - node.y) * y, 2) - node.wave) < 2 &&
-                            3 * random() < 1 - abs(e.color - node.color) / 256 &&
-                            startHype(node, e)
+                nodes.some(function (node) {
+                    node.hyped ||
+                        abs(sqrt((x = e.x - node.x) * x + (y = e.y - node.y) * y, 2) - e.wave) < 2 &&
+                            3 * random() < 1 - abs(node.color - e.color) / 256 &&
+                            startHype(e, node)
                 }),
 
                 // draw hype wave
