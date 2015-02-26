@@ -130,7 +130,7 @@ nodes.some(function (node) {
         // draw spectrum
         e = 256; while (e--) {
             c.fillStyle = 'rgba(' + [255, 255 - e, e, 1] + ')',
-            c.fillRect(147 + e * 2, 610 - spectrum[e] * 2, 2, spectrum[e] * 2)
+            c.fillRect(147 + e * 2, 610 - log(spectrum[e]) * 5, 2, log(spectrum[e]) * 5)
         }
 
         // draw line
