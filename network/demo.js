@@ -110,7 +110,7 @@ nodes.some(function (node) {
                 nodes.some(function (node) {
                     node.hyped ||
                         abs(sqrt((x = e.x - node.x) * x + (y = e.y - node.y) * y, 2) - e.wave) < 2 &&
-                            3 * random() < 1 - abs(node.color - e.color) / 256 &&
+                            node.radius * random() < 1 - abs(node.color - e.color) / 256 &&
                             startHype(e, node)
                 }),
 
