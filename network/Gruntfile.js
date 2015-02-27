@@ -87,14 +87,16 @@ module.exports = function(grunt) {
     fs.writeFileSync('build/demo.mng.js', data);
   });
 
-  grunt.registerTask('copy-shim', function() {
+  grunt.registerTask('compile', function() {
     var fs = require('fs'),
         demo = fs.readFileSync('build/demo.zip.js'),
-        shim = fs.readFileSync('shim.html', {encoding: 'utf8'});
+        shim = fs.readFileSync('shim.html', {encoding: 'utf8'}),
+        base64 = new Buffer(demo).toString('base64')
+    fs.writeFileSync('build/demo.txt', base64);
     shim = shim.split('%DEMO%').join(demo);
     fs.writeFileSync('build/shim.html', shim);
   });
 
-  grunt.registerTask('default', ['uglify', 'mangle', 'regpack', 'copy-shim']);
+  grunt.registerTask('default', ['uglify', 'mangle', 'regpack', 'compile']);
 
 };
