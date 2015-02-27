@@ -16,7 +16,6 @@ module.exports = function(grunt) {
       names: [
         'color',
         'cScale',
-        'draw',
         'hyped',
         'idle',
         'node',
@@ -27,6 +26,7 @@ module.exports = function(grunt) {
         'spectrum',
         'startHype',
         'time',
+        'update',
         'vx',
         'vy',
         'wave'

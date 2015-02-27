@@ -3,7 +3,7 @@ showInstructions =
 // ticks since last hype started
 idle = 150,
 
-// node information (position, color, hype, ...)
+// node information: position, color, hype, ...
 nodes = [],
 
 onclick = function (e, f) {
@@ -54,8 +54,8 @@ nodes.some(function (node) {
     node.node = {x: node.x, y: node.y}
 }),
 
-(draw = function (e, f) {
-    requestAnimationFrame(draw),
+(update = function (e, f) {
+    requestAnimationFrame(update),
 
     e - time > 30 && (function (e, f) {
         time = e,
@@ -88,7 +88,7 @@ nodes.some(function (node) {
             spectrum[e] = 0
         }
 
-        // update nodes and waves, draw waves
+        // update nodes and waves
         nodes.some(function (node) {
             // move node
             node.x += node.vx *= .9,
@@ -106,7 +106,7 @@ nodes.some(function (node) {
             // update hype wave
             node.wave && (
                 e = node,
-                // hype touched nodes
+                // hype infecting new nodes
                 nodes.some(function (node) {
                     node.hyped ||
                         abs(sqrt((x = e.x - node.x) * x + (y = e.y - node.y) * y, 2) - e.wave) < 2 &&
