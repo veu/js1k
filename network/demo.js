@@ -64,8 +64,8 @@ nodes.some(function (node) {
         ++idle - 200 ||
             startHype(node = nodes[256 * random() | 0], node),
 
-        // reset context state and draw background
-        c.fillRect(0, 0, a.width = a.width, a.height),
+        // reset context state, reset color spectrum, and draw background
+        c.fillRect(spectrum = [], 0, a.width = a.width, a.height),
         // scale canvas to demo size
         c.scale(cScale = min(a.width / 804, a.height / 640), cScale),
         // center demo
@@ -76,8 +76,6 @@ nodes.some(function (node) {
         showInstructions &&
             c.fillText('Click a circle to hype it', 345, 590),
 
-        // reset color spectrum
-        spectrum = [],
 
         // draw title
         c.font = '30px Trebuchet MS',
@@ -115,9 +113,9 @@ nodes.some(function (node) {
                 }),
 
                 // draw hype wave
+                e = node.color, c.fillStyle = 'rgba(' + [255, 255 - e, e, 1 / 7],
                 c.beginPath(),
                 c.arc(node.x, node.y, node.wave, 0, 7, 0),
-                e = node.color, c.fillStyle = 'rgba(' + [255, 255 - e, e, 1 / 7],
                 c.fill(),
                 e = node.color, c.strokeStyle = 'rgba(' + [255, 255 - e, e, 1 / 3],
                 c.stroke(),
@@ -140,10 +138,10 @@ nodes.some(function (node) {
 
         // draw nodes
         nodes.some(function (node) {
-            c.beginPath(),
-            c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.radius, 0, 7, 0),
             e = node.color, c.shadowColor = c.fillStyle = 'rgba(' + [255, 255 - e, e, 1],
             c.shadowBlur = node.radius * 3,
+            c.beginPath(),
+            c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.radius, 0, 7, 0),
             c.fill()
         })
     })(e)
