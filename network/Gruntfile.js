@@ -84,6 +84,9 @@ module.exports = function(grunt) {
 
       data = data.replace(re, c);
     });
+    if (data[data.length - 1] == ';') {
+        data = data.substr(0, data.length - 1);
+    }
     fs.writeFileSync('build/demo.mng.js', data);
   });
 
