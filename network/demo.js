@@ -117,9 +117,9 @@ nodes.some(function (node) {
                 // draw hype wave
                 c.beginPath(),
                 c.arc(node.x, node.y, node.wave, 0, 7, 0),
-                e = node.color, c.fillStyle = 'rgba(' + [255, 255 - e, e, 1 / 7] + ')',
+                e = node.color, c.fillStyle = 'rgba(' + [255, 255 - e, e, 1 / 7],
                 c.fill(),
-                e = node.color, c.strokeStyle = 'rgba(' + [255, 255 - e, e, 1 / 3] + ')',
+                e = node.color, c.strokeStyle = 'rgba(' + [255, 255 - e, e, 1 / 3],
                 c.stroke(),
 
                 // stop wave
@@ -130,7 +130,7 @@ nodes.some(function (node) {
 
         // draw spectrum
         e = 256; while (e--) {
-            c.fillStyle = 'rgba(' + [255, 255 - e, e, 1] + ')',
+            c.fillStyle = 'rgba(' + [255, 255 - e, e, 1],
             c.fillRect(147 + e * 2, 610 - log(spectrum[e]) * 5, 2, log(spectrum[e]) * 5)
         }
 
@@ -142,7 +142,7 @@ nodes.some(function (node) {
         nodes.some(function (node) {
             c.beginPath(),
             c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.radius, 0, 7, 0),
-            e = node.color, c.shadowColor = c.fillStyle = 'rgba(' + [255, 255 - e, e, 1] + ')',
+            e = node.color, c.shadowColor = c.fillStyle = 'rgba(' + [255, 255 - e, e, 1],
             c.shadowBlur = node.radius * 3,
             c.fill()
         })
