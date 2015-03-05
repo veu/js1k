@@ -16,7 +16,6 @@ module.exports = function(grunt) {
       names: [
         'color',
         'cScale',
-        'hyped',
         'idle',
         'node',
         'nodes',

@@ -11,7 +11,7 @@ onclick = function (e, f) {
     showInstructions =
         // check if we clicked on a node
         nodes.some(function (node) {
-            (x = e.pageX / cScale - offset - node.x) * x + (y = e.pageY / cScale - node.y) * y > node.radius * node.radius
+            sqrt((x = node.x - e.pageX / cScale + offset) * x + (y = node.y - e.pageY / cScale) * y) > node.radius
                 || startHype(node, node)
         })
 },
@@ -23,7 +23,7 @@ startHype = function (e, f) {
     f.vx = (e.x - f.x) / 25,
     f.vy = (e.y - f.y) / 25,
     // set hype length
-    f.hyped = 200,
+    f.e = 200,
     // reset idle cooldown
     idle =
     // start hype wave
@@ -41,7 +41,7 @@ e = 600; while (e--) {
         // speed
         vx: 0, vy: 0,
         // hype (shaking animation)
-        hyped: 0,
+        e: 0,
         // hype wave radius
         wave: time = 0,
         // node radius
@@ -93,7 +93,7 @@ nodes.some(function (node) {
             node.y += node.vy *= .9,
 
             // update hype or move node back to origin
-            node.hyped ? node.hyped-- : (
+            node.e ? node.e-- : (
                 node.x += (node.node.x - node.x) / 500,
                 node.y += (node.node.y - node.y) / 500
             ),
@@ -106,8 +106,8 @@ nodes.some(function (node) {
                 e = node,
                 // hype infecting new nodes
                 nodes.some(function (node) {
-                    node.hyped ||
-                        abs(sqrt((x = e.x - node.x) * x + (y = e.y - node.y) * y, 2) - e.wave) < 2 &&
+                    node.e ||
+                        abs(sqrt((x = node.x - e.x) * x + (y = node.y - e.y) * y, 2) - e.wave) < 2 &&
                             node.radius * random() < 1 - abs(node.color - e.color) / 256 &&
                             startHype(e, node)
                 }),
@@ -141,7 +141,7 @@ nodes.some(function (node) {
             e = node.color, c.shadowColor = c.fillStyle = 'rgba(' + [255, 255 - e, e, 1],
             c.shadowBlur = node.radius * 3,
             c.beginPath(),
-            c.arc(node.x + node.hyped * random() / 100, node.y + node.hyped * random() / 100, node.radius, 0, 7, 0),
+            c.arc(node.x + node.e * random() / 100, node.y + node.e * random() / 100, node.radius, 0, 7, 0),
             c.fill()
         })
     })(e)
