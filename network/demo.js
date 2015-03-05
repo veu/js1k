@@ -4,7 +4,7 @@ showInstructions =
 idle = 150,
 
 // node information: position, color, hype, ...
-nodes = [],
+nodes = [e = 600],
 
 onclick = function (e, f) {
     // hide instructions
@@ -28,16 +28,16 @@ startHype = function (e, f) {
     idle =
     // start hype wave
     f.wave = 1
-},
+};
 
 // setup grid
-e = 600; while (e--) {
-    nodes.push({
+while (e--) {
+    nodes[e] = {
         // node color
         color: 256 * Math.random() | 0,
         // position
-        x: e % 30 * 25 + 30 + 20 * Math.random(),
-        y: (e / 30 | 0) * 25 + 30 + 20 * Math.random(),
+        x: x = e % 30 * 25 + 30 + 20 * Math.random(),
+        y: y = (e / 30 | 0) * 25 + 30 + 20 * Math.random(),
         // speed
         vx: 0, vy: 0,
         // hype (shaking animation)
@@ -45,14 +45,11 @@ e = 600; while (e--) {
         // hype wave radius
         wave: time = 0,
         // node radius
-        radius: 5 * Math.random() + 1 | 0
-    })
+        radius: 5 * Math.random() + 1 | 0,
+        // remember original node position
+        node: {x: x, y: y}
+    }
 }
-
-// remember original node positions
-nodes.some(function (node) {
-    node.node = {x: node.x, y: node.y}
-}),
 
 (update = function (e, f) {
     requestAnimationFrame(update),
