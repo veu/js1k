@@ -17,4 +17,4 @@ You'll find the compiled demo including the JS1k shim in `build/shim.html`.
 
 ## Contributors
 
-Rauri ([@raurir](https://twitter.com/raurir)) and Arne ([@veubeke](https://twitter.com/veubeke))
+Rauri ([@raurir](https://twitter.com/raurir)) and Rebecca ([@veubeke](https://twitter.com/veubeke))
